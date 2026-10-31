@@ -71,8 +71,8 @@ export default function AddStudioPage() {
     imageUrl: "",
     amenities: [],
     overview: "",
-    hostName: "John Doe",
-    hostEmail: "john@example.com",
+    hostName: "Imran Nazir",
+    hostEmail: "imran@example.com",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -103,7 +103,9 @@ export default function AddStudioPage() {
         return undefined;
       }
       case "location":
-        return !String(value).trim() ? "Location/Address is required." : undefined;
+        return !String(value).trim()
+          ? "Location/Address is required."
+          : undefined;
       case "imageUrl":
         return !String(value).trim() ? "Image URL is required." : undefined;
       case "overview": {
@@ -138,12 +140,24 @@ export default function AddStudioPage() {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    const res = await fetch("http://localhost:8000/add-studio", {
+      method: "POST",
+      headers: {
+        "Content-type":"application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+    const data = await res.json()
+    console.log(data)
     const newErrors: FormErrors = {};
     (Object.keys(formData) as Array<keyof StudioFormData>).forEach((field) => {
-      if (field === "hostName" || field === "hostEmail" || field === "amenities") {
+      if (
+        field === "hostName" ||
+        field === "hostEmail" ||
+        field === "amenities"
+      ) {
         return;
       }
       const error = validateField(field, formData[field]);
@@ -155,7 +169,7 @@ export default function AddStudioPage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      toast.error("Please fix the errors in the form before submitting.");
+      toast.error("Please fill up the form");
       return;
     }
 
@@ -204,7 +218,11 @@ export default function AddStudioPage() {
                   placeholder="e.g. Industrial Daylight Loft & Cyc"
                   value={formData.title}
                   onChange={(e) => handleChange("title", e.target.value)}
-                  className={errors.title ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.title
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
                 {errors.title && (
                   <p className="text-xs text-red-600">{errors.title}</p>
@@ -222,7 +240,11 @@ export default function AddStudioPage() {
                   >
                     <SelectTrigger
                       id="category"
-                      className={errors.category ? "border-red-500 focus-visible:ring-red-500" : ""}
+                      className={
+                        errors.category
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : ""
+                      }
                     >
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -241,7 +263,8 @@ export default function AddStudioPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="maxCapacity" className="text-slate-700">
-                    Max Capacity (Persons) <span className="text-red-500">*</span>
+                    Max Capacity (Persons){" "}
+                    <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="maxCapacity"
@@ -249,8 +272,14 @@ export default function AddStudioPage() {
                     min="1"
                     placeholder="e.g. 25"
                     value={formData.maxCapacity}
-                    onChange={(e) => handleChange("maxCapacity", e.target.value)}
-                    className={errors.maxCapacity ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    onChange={(e) =>
+                      handleChange("maxCapacity", e.target.value)
+                    }
+                    className={
+                      errors.maxCapacity
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
                   {errors.maxCapacity && (
                     <p className="text-xs text-red-600">{errors.maxCapacity}</p>
@@ -271,7 +300,11 @@ export default function AddStudioPage() {
                     placeholder="e.g. 95"
                     value={formData.hourlyRate}
                     onChange={(e) => handleChange("hourlyRate", e.target.value)}
-                    className={errors.hourlyRate ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={
+                      errors.hourlyRate
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
                   {errors.hourlyRate && (
                     <p className="text-xs text-red-600">{errors.hourlyRate}</p>
@@ -280,7 +313,8 @@ export default function AddStudioPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="securityDeposit" className="text-slate-700">
-                    Security Deposit ($ USD) <span className="text-red-500">*</span>
+                    Security Deposit ($ USD){" "}
+                    <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="securityDeposit"
@@ -289,11 +323,19 @@ export default function AddStudioPage() {
                     step="1"
                     placeholder="e.g. 250"
                     value={formData.securityDeposit}
-                    onChange={(e) => handleChange("securityDeposit", e.target.value)}
-                    className={errors.securityDeposit ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    onChange={(e) =>
+                      handleChange("securityDeposit", e.target.value)
+                    }
+                    className={
+                      errors.securityDeposit
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
                   {errors.securityDeposit && (
-                    <p className="text-xs text-red-600">{errors.securityDeposit}</p>
+                    <p className="text-xs text-red-600">
+                      {errors.securityDeposit}
+                    </p>
                   )}
                 </div>
               </div>
@@ -320,7 +362,11 @@ export default function AddStudioPage() {
                   placeholder="e.g. SoHo, Manhattan, NY"
                   value={formData.location}
                   onChange={(e) => handleChange("location", e.target.value)}
-                  className={errors.location ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.location
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
                 {errors.location && (
                   <p className="text-xs text-red-600">{errors.location}</p>
@@ -337,7 +383,11 @@ export default function AddStudioPage() {
                   placeholder="Upload image to imgbb/postimage and paste URL here"
                   value={formData.imageUrl}
                   onChange={(e) => handleChange("imageUrl", e.target.value)}
-                  className={errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.imageUrl
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
                 {errors.imageUrl && (
                   <p className="text-xs text-red-600">{errors.imageUrl}</p>
@@ -387,7 +437,8 @@ export default function AddStudioPage() {
                 4. Description
               </CardTitle>
               <CardDescription className="text-sm text-slate-500">
-                Tell creators what makes your studio unique (minimum 50 characters).
+                Tell creators what makes your studio unique (minimum 50
+                characters).
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -401,7 +452,11 @@ export default function AddStudioPage() {
                   placeholder="Describe your studio space, equipment, lighting conditions, and unique features..."
                   value={formData.overview}
                   onChange={(e) => handleChange("overview", e.target.value)}
-                  className={errors.overview ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.overview
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
                 <div className="flex items-center justify-between">
                   {errors.overview ? (

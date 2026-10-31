@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { MapPin, Star, Search, Filter, Zap } from "lucide-react";
+import { MapPin, Star, Search, Filter, Zap, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,93 +14,44 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Homepage Featured Studios Data Format অনুযায়ী ডেটা
-const STUDIOS = [
-  {
-    id: "sunlit-soho-daylight-loft",
-    title: "Sunlit Soho Daylight Loft & Cyc Wall",
-    category: "Photo Studio",
-    location: "SoHo, Manhattan NY",
-    price: 95,
-    rating: 4.98,
-    reviews: 124,
-    sqft: 2400,
-    instantBook: true,
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "sound-stage-a-green-screen",
-    title: "Sound Stage A with 30ft Green Screen",
-    category: "Film Stage",
-    location: "Burbank, CA",
-    price: 160,
-    rating: 4.95,
-    reviews: 88,
-    sqft: 4800,
-    instantBook: true,
-    image:
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "acoustic-master-podcast-lounge",
-    title: "Acoustic Master Audio & Podcast Lounge",
-    category: "Podcast Room",
-    location: "Nashville, TN",
-    price: 75,
-    rating: 5.0,
-    reviews: 64,
-    sqft: 650,
-    instantBook: true,
-    image:
-      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "analog-synthesizer-live-music-suite",
-    title: "Analog Synthesizer & Live Music Suite",
-    category: "Music Suite",
-    location: "Austin, TX",
-    price: 110,
-    rating: 4.92,
-    reviews: 53,
-    sqft: 1100,
-    instantBook: false,
-    image:
-      "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "minimalist-editorial-concrete-studio",
-    title: "Minimalist Editorial Concrete Studio",
-    category: "Photo Studio",
-    location: "Chicago, IL",
-    price: 85,
-    rating: 4.97,
-    reviews: 91,
-    sqft: 1850,
-    instantBook: true,
-    image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "multi-set-content-creator-lab",
-    title: "Multi-Set Content Creator & Streaming Lab",
-    category: "Content Lab",
-    location: "Atlanta, GA",
-    price: 70,
-    rating: 4.89,
-    reviews: 112,
-    sqft: 1400,
-    instantBook: true,
-    image:
-      "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80",
-  },
-];
+interface Studio {
+  _id: string;
+  title: string;
+  category: string;
+  location: string;
+  hourlyRate: number | string;
+  imageUrl: string;
+  instantBook?: boolean;
+  rating?: number;
+  reviews?: number;
+}
 
 export default function ExploreStudiosPage() {
+  const [studios, setStudios] = useState<Studio[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const filteredStudios = STUDIOS.filter((studio) => {
+  useEffect(() => {
+    const fetchStudios = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/studios");
+        if (!response.ok) {
+          throw new Error("Failed to fetch studios");
+        }
+        const data = await response.json();
+        setStudios(data);
+      } catch (error) {
+        console.error("Error fetching studios:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStudios();
+  }, []);
+
+  const filteredStudios = studios.filter((studio) => {
     const matchesSearch =
       studio.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       studio.location.toLowerCase().includes(searchTerm.toLowerCase());
@@ -108,6 +59,14 @@ export default function ExploreStudiosPage() {
       selectedCategory === "all" || studio.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <Loader2 className="size-8 animate-spin text-slate-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 py-12">
@@ -145,8 +104,9 @@ export default function ExploreStudiosPage() {
                 <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="Photo Studio">Photo Studio</SelectItem>
                 <SelectItem value="Film Stage">Film Stage</SelectItem>
-                <SelectItem value="Podcast Room">Podcast Room</SelectItem>
+                <SelectItem value="Podcast Lounge">Podcast Lounge</SelectItem>
                 <SelectItem value="Music Suite">Music Suite</SelectItem>
+                <SelectItem value="Art Workshop">Art Workshop</SelectItem>
                 <SelectItem value="Content Lab">Content Lab</SelectItem>
               </SelectContent>
             </Select>
@@ -158,14 +118,14 @@ export default function ExploreStudiosPage() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredStudios.map((studio) => (
               <Link
-                href={`/studios/${studio.id}`}
-                key={studio.id}
+                href={`/studios/${studio._id}`}
+                key={studio._id}
                 className="group block"
               >
                 <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
                   <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
                     <Image
-                      src={studio.image}
+                      src={studio.imageUrl}
                       alt={studio.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -193,15 +153,15 @@ export default function ExploreStudiosPage() {
                       <div className="flex items-center gap-1">
                         <Star className="size-4 fill-amber-400 text-amber-400" />
                         <span className="text-sm font-medium text-slate-900">
-                          {studio.rating}
+                          {studio.rating || 5.0}
                         </span>
                         <span className="text-xs text-slate-400">
-                          ({studio.reviews})
+                          ({studio.reviews || 0})
                         </span>
                       </div>
                       <div className="text-right">
                         <span className="font-heading text-lg font-bold text-blue-900">
-                          ${studio.price}
+                          ${studio.hourlyRate}
                         </span>
                         <span className="text-xs text-slate-500"> / hr</span>
                       </div>
