@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Heart, MapPin, Star } from "lucide-react";
-import { cn } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 import type { Studio } from "@/types/studio";
 
 type StudioCardProps = {

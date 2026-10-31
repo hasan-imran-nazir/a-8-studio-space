@@ -1,5 +1,5 @@
 import { Key, Lock, PlusCircle, SlidersHorizontal } from "lucide-react";
-import { cn } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 const steps = [
   {

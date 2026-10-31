@@ -12,7 +12,7 @@ import {
   Shield,
   Star,
 } from "lucide-react";
-import { cn } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 type Slide = {
   title: string;
@@ -95,7 +95,7 @@ export default function HeroSlider() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-linear-to-br from-blue-900 via-blue-800 to-slate-900 py-16 sm:py-20 lg:py-24">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-30"
@@ -107,11 +107,11 @@ export default function HeroSlider() {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-32 -top-32 size-[32rem] rounded-full bg-sky-400/20 blur-3xl"
+        className="pointer-events-none absolute -right-32 -top-32 size-128 rounded-full bg-sky-400/20 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-48 -left-32 size-[28rem] rounded-full bg-blue-500/20 blur-3xl"
+        className="pointer-events-none absolute -bottom-48 -left-32 size-112 rounded-full bg-blue-500/20 blur-3xl"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -127,7 +127,7 @@ export default function HeroSlider() {
 
             <h1 className="mt-6 max-w-2xl font-heading text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl xl:text-6xl">
               Find Your Perfect{" "}
-              <span className="bg-gradient-to-r from-sky-300 via-cyan-200 to-blue-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-sky-300 via-cyan-200 to-blue-300 bg-clip-text text-transparent">
                 Creative Space
               </span>
             </h1>
@@ -158,7 +158,7 @@ export default function HeroSlider() {
               {proofPoints.map(({ label, icon: Icon, iconClassName }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-blue-100 backdrop-blur-sm sm:text-[11px]"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-blue-100 backdrop-blur-sm sm:text-[11px]"
                 >
                   <Icon className={cn("size-3.5 shrink-0", iconClassName)} />
                   {label}

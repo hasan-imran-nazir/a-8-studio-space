@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import StudioCard from "@/components/home/StudioCard";
-import { cn } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 import type { Studio } from "@/types/studio";
 
 const studios: Studio[] = [
