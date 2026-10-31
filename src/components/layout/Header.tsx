@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Aperture, Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/auth";
 
 const navigation = [
   { name: "Home", href: "/" },

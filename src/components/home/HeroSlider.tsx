@@ -12,7 +12,7 @@ import {
   Shield,
   Star,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/auth";
 
 type Slide = {
   title: string;

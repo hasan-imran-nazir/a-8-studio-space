@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  Chrome,
   Image as ImageIcon,
   Loader2,
   LockKeyhole,
@@ -11,7 +12,6 @@ import {
   User,
 } from "lucide-react";
 import { toast } from "sonner";
-import GoogleIcon from "@/components/auth/GoogleIcon";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
@@ -357,7 +357,7 @@ export default function RegisterPage() {
             {isGoogleLoading ? (
               <Loader2 className="size-4 animate-spin" />
             ) : (
-              <GoogleIcon className="size-4" />
+              <Chrome className="w-5 h-5" />
             )}
             Continue with Google
           </Button>
