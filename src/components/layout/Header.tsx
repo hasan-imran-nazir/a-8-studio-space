@@ -1,50 +1,25 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Aperture, Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import AuthButtons from "@/components/layout/AuthButtons";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Explore Studios", href: "/studios" },
-  { name: "add Studios", href: "/add-studio" },
   { name: "How It Works", href: "/#how-it-works" },
   { name: "About Us", href: "/#about" },
 ];
 
-const buttonBase =
-  "inline-flex h-9 items-center justify-center rounded-md px-4 font-heading text-xs font-semibold uppercase tracking-[0.12em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+const navLink =
+  "border-b-2 border-transparent px-3 py-2 font-heading text-xs font-medium uppercase tracking-[0.12em] text-slate-600 transition-colors hover:text-slate-900";
 
-const buttonOutline = cn(
-  buttonBase,
-  "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-);
-
-const buttonPrimary = cn(
-  buttonBase,
-  "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
-);
+const mobileNavLink =
+  "rounded-md border-l-2 border-transparent px-3 py-2.5 font-heading text-sm font-medium uppercase tracking-[0.12em] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900";
 
 export default function Header() {
-  const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const isActive = (href: string) => {
-    if (href.startsWith("/#")) return false;
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname.startsWith(`${href}/`);
-  };
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-lg supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="group flex items-center gap-2.5"
-          onClick={() => setIsMenuOpen(false)}
-        >
+        <Link href="/" className="group flex items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-md bg-slate-900 text-white transition-colors group-hover:bg-slate-700">
             <Aperture className="size-5" strokeWidth={2} />
           </span>
@@ -57,101 +32,48 @@ export default function Header() {
           className="hidden items-center gap-1 md:flex"
           aria-label="Main navigation"
         >
-          {navigation.map((item) => {
-            const active = isActive(item.href);
-
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "border-b-2 px-3 py-2 font-heading text-xs font-medium uppercase tracking-[0.12em] transition-colors",
-                  active
-                    ? "border-blue-900 font-semibold text-blue-900"
-                    : "border-transparent text-slate-600 hover:text-slate-900",
-                )}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
+          {navigation.map((item) => (
+            <Link key={item.name} href={item.href} className={navLink}>
+              {item.name}
+            </Link>
+          ))}
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Link href="/login" className={buttonOutline}>
-            Login
-          </Link>
-          <Link href="/register" className={buttonPrimary}>
-            Register
-          </Link>
+          <AuthButtons />
         </div>
 
-        <button
-          type="button"
-          className="inline-flex size-10 items-center justify-center rounded-md border border-input bg-background text-foreground transition-colors hover:bg-accent md:hidden"
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setIsMenuOpen((open) => !open)}
-        >
-          {isMenuOpen ? (
-            <X className="size-5" />
-          ) : (
-            <Menu className="size-5" />
-          )}
-        </button>
-      </div>
-
-      {isMenuOpen && (
-        <div
-          id="mobile-menu"
-          className="border-t border-border bg-background md:hidden"
-        >
-          <nav
-            className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
-            aria-label="Mobile navigation"
+        <details className="group md:hidden">
+          <summary
+            className="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-md border border-input bg-background text-foreground transition-colors hover:bg-accent [&::-webkit-details-marker]:hidden"
+            aria-label="Toggle navigation menu"
           >
-            {navigation.map((item) => {
-              const active = isActive(item.href);
+            <Menu className="size-5 group-open:hidden" />
+            <X className="hidden size-5 group-open:block" />
+          </summary>
 
-              return (
+          <div className="absolute inset-x-0 top-16 border-t border-border bg-background shadow-sm">
+            <nav
+              className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
+              aria-label="Mobile navigation"
+            >
+              {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={cn(
-                    "rounded-md border-l-2 px-3 py-2.5 font-heading text-sm font-medium uppercase tracking-[0.12em] transition-colors",
-                    active
-                      ? "border-blue-900 bg-blue-50 font-semibold text-blue-900"
-                      : "border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900",
-                  )}
+                  className={mobileNavLink}
                 >
                   {item.name}
                 </Link>
-              );
-            })}
+              ))}
 
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-4">
-              <Link
-                href="/login"
-                className={cn(buttonOutline, "w-full")}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                className={cn(buttonPrimary, "w-full")}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Register
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
+              <div className="mt-3 border-t border-border pt-4">
+                <AuthButtons className="w-full" />
+              </div>
+            </nav>
+          </div>
+        </details>
+      </div>
     </header>
   );
 }
