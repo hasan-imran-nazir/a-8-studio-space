@@ -27,7 +27,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedEmail = email.trim();
@@ -122,7 +122,7 @@ export default function LoginPage() {
         </CardHeader>
 
         <CardContent className="px-6 pb-8 sm:px-8">
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleLoginSubmit} noValidate className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-slate-700">
                 Email
@@ -153,7 +153,7 @@ export default function LoginPage() {
                   Password
                 </Label>
                 <Link
-                  href="/forgot-password"
+                  href="/login"
                   className="font-heading text-xs font-medium text-blue-700 transition-colors hover:text-blue-800"
                 >
                   Forgot Password?
@@ -168,7 +168,6 @@ export default function LoginPage() {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
                   placeholder="Enter your password"
                   required
                   value={password}
@@ -203,7 +202,7 @@ export default function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
-                  Signing in...
+                  Logging in...
                 </>
               ) : (
                 "Login"

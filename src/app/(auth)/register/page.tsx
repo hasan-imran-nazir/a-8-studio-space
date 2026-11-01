@@ -80,13 +80,19 @@ export default function RegisterPage() {
     setPasswordErrors(getPasswordErrors(password));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const trimmedName = name.trim();
-    const trimmedEmail = email.trim();
-    const trimmedPhotoUrl = photoUrl.trim();
-    const currentPasswordErrors = getPasswordErrors(password);
+    const formData = new FormData(event.currentTarget);
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      email: string;
+      photoUrl: string;
+      password: string;
+    };
+    const trimmedName = user.name.trim();
+    const trimmedEmail = user.email.trim();
+    const trimmedPhotoUrl = user.photoUrl.trim();
+    const currentPasswordErrors = getPasswordErrors(user.password);
 
     if (!trimmedName) {
       toast.error("Name is required.");
@@ -129,7 +135,6 @@ export default function RegisterPage() {
         email: trimmedEmail,
         password,
         image: trimmedPhotoUrl,
-        callbackURL: "/login",
       });
 
       if (error) {
@@ -137,9 +142,8 @@ export default function RegisterPage() {
         return;
       }
 
-      toast.success("Account created! Please sign in to continue.");
-      router.push("/login");
-      router.refresh();
+      toast.success(`Account created! Welcome, ${trimmedName}`);
+      router.push("/");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -147,7 +151,7 @@ export default function RegisterPage() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignin = async () => {
     setIsGoogleLoading(true);
 
     try {
@@ -198,7 +202,7 @@ export default function RegisterPage() {
         </CardHeader>
 
         <CardContent className="px-6 pb-8 sm:px-8">
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleEmailSubmit} noValidate className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-slate-700">
                 Name
@@ -288,9 +292,7 @@ export default function RegisterPage() {
                   placeholder="Create a password"
                   required
                   value={password}
-                  onChange={(event) =>
-                    handlePasswordChange(event.target.value)
-                  }
+                  onChange={(event) => handlePasswordChange(event.target.value)}
                   onBlur={handlePasswordBlur}
                   disabled={isLoading}
                   aria-invalid={showPasswordErrors}
@@ -350,7 +352,7 @@ export default function RegisterPage() {
             type="button"
             variant="outline"
             size="lg"
-            onClick={handleGoogleLogin}
+            onClick={handleGoogleSignin}
             disabled={isGoogleLoading || isLoading}
             className="h-11 w-full gap-2.5 font-heading text-sm font-medium"
           >
