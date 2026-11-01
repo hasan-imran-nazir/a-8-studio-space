@@ -9,4 +9,7 @@ export interface Studio {
   image: string;
   instantBook?: boolean;
   naturalLight?: boolean;
+  hourlyRate?: number
+  maxCapacity?: string | number;
+  securityDeposit?: number;
 }
