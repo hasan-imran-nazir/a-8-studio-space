@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2, PlusCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ const AMENITIES_OPTIONS = [
 type FormErrors = Partial<Record<keyof StudioFormData, string>>;
 
 export default function AddStudioPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState<StudioFormData>({
     title: "",
     category: "",
@@ -142,15 +144,7 @@ export default function AddStudioPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const res = await fetch("http://localhost:8000/add-studio", {
-      method: "POST",
-      headers: {
-        "Content-type":"application/json"
-      },
-      body: JSON.stringify(formData)
-    });
-    const data = await res.json()
-    console.log(data)
+
     const newErrors: FormErrors = {};
     (Object.keys(formData) as Array<keyof StudioFormData>).forEach((field) => {
       if (
@@ -175,10 +169,51 @@ export default function AddStudioPage() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Convert the numeric inputs from strings before sending them to the API.
+      const payload = {
+        ...formData,
+        hourlyRate: Number(formData.hourlyRate),
+        securityDeposit: Number(formData.securityDeposit),
+        maxCapacity: Number(formData.maxCapacity),
+      };
+
+      const res = await fetch("http://localhost:8000/add-studio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        let message = `Failed to add studio (HTTP ${res.status}).`;
+
+        try {
+          const parsed = JSON.parse(text) as { error?: string };
+          if (parsed?.error) message = parsed.error;
+        } catch {
+          // Non-JSON error response (e.g. an HTML error page).
+        }
+
+        throw new Error(message);
+      }
+
       toast.success("Studio added successfully!");
-    }, 800);
+      // The studios page fetches fresh data on mount, so a plain push is enough.
+      // Calling router.refresh() here would re-render the current (add) route and
+      // can delay or cancel the pending navigation.
+      router.push("/studios");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

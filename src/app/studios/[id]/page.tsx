@@ -3,12 +3,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
   MapPin,
-  Star,
-  Share2,
-  Heart,
+  Pencil,
   Shield,
   BadgeCheck,
-  Camera,
   Wifi,
   Car,
   UtensilsCrossed,
@@ -17,7 +14,6 @@ import {
   VolumeX,
   Sparkles,
   Scissors,
-  Users,
   Clock,
   ChevronRight,
   type LucideIcon,
@@ -56,7 +52,6 @@ export default async function StudioDetailsPage({
 }) {
   const { id } = await params;
 
-  // Fetch EXACTLY from your API. No mock data.
   const response = await fetch(`http://localhost:8000/studios/${id}`, {
     cache: "no-store",
   });
@@ -65,7 +60,6 @@ export default async function StudioDetailsPage({
     notFound();
   }
 
-  // This is the REAL data from your MongoDB
   const studio = await response.json();
 
   return (
@@ -103,14 +97,12 @@ export default async function StudioDetailsPage({
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <Button variant="outline" size="sm">
-              <Share2 className="size-4 mr-2" />
-              Share
-            </Button>
-            <Button variant="outline" size="sm">
-              <Heart className="size-4 mr-2 text-rose-500 fill-rose-500" />
-              Save
-            </Button>
+            <Link href={`/studios/edit/${id}`}>
+              <Button variant="outline" size="sm">
+                <Pencil className="size-4 mr-2" />
+                Edit
+              </Button>
+            </Link>
           </div>
         </div>
 

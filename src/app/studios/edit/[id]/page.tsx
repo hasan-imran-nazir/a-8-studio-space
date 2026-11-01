@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -58,37 +68,29 @@ const AMENITIES_OPTIONS = [
   "Makeup Station",
 ] as const;
 
-// Dummy data for pre-filling (পরবর্তীতে API থেকে fetch করা হবে)
-const MOCK_STUDIOS: Record<string, StudioFormData> = {
-  "sunlit-soho-daylight-loft": {
-    title: "Sunlit Soho Daylight Loft & Cyc Wall",
-    category: "Photo Studio",
-    hourlyRate: "95",
-    securityDeposit: "250",
-    maxCapacity: "35",
-    location: "SoHo, Manhattan NY",
-    imageUrl: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
-    amenities: ["WiFi", "Natural Light", "Cyclorama Wall", "Makeup Station"],
-    overview: "Tucked into a landmark cast-iron building in prime Soho, this sun-drenched 2,400-square-foot daylight studio is engineered specifically for commercial film directors.",
-    hostName: "Elena Rostova",
-    hostEmail: "elena@studiospace.com",
-  },
-  "sound-stage-a-green-screen": {
-    title: "Sound Stage A with 30ft Green Screen",
-    category: "Film Stage",
-    hourlyRate: "160",
-    securityDeposit: "500",
-    maxCapacity: "50",
-    location: "Burbank, CA",
-    imageUrl: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=800&q=80",
-    amenities: ["Green Screen", "Parking", "Restroom", "Equipment Rental"],
-    overview: "Expansive commercial sound stage with huge curved 30 foot chromakey green screen infinity wall, overhead truss lighting systems, and sound isolation padding.",
-    hostName: "Marcus Chen",
-    hostEmail: "marcus@studiospace.com",
-  },
-};
-
 type FormErrors = Partial<Record<keyof StudioFormData, string>>;
+
+type ApiResponse = { error?: string; message?: string } & Record<string, unknown>;
+
+const OBJECT_ID_PATTERN = /^[a-f\d]{24}$/i;
+
+async function readJsonResponse(response: Response): Promise<ApiResponse | null> {
+  const text = await response.text();
+
+  if (!text) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(text);
+    return parsed && typeof parsed === "object" ? (parsed as ApiResponse) : null;
+  } catch {
+    return null;
+  }
+}
+
+function asString(value: unknown) {
+  if (value === null || value === undefined) return "";
+  return String(value);
+}
 
 export default function EditStudioPage() {
   const router = useRouter();
@@ -99,21 +101,65 @@ export default function EditStudioPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  // Simulate fetching existing data
   useEffect(() => {
     const fetchStudio = async () => {
-      // পরবর্তীতে এটি একটি API call হবে: const res = await fetch(`/api/studios/${studioId}`);
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulated delay
-      
-      const existingData = MOCK_STUDIOS[studioId];
-      if (existingData) {
-        setFormData(existingData);
-      } else {
-        toast.error("Studio not found.");
+      if (!OBJECT_ID_PATTERN.test(studioId)) {
+        toast.error("Invalid studio id. Redirecting to your listings.");
         router.push("/my-listings");
+        setIsFetching(false);
+        return;
       }
-      setIsFetching(false);
+
+      try {
+        const response = await fetch(`http://localhost:8000/studios/${studioId}`);
+        const data = await readJsonResponse(response);
+
+        if (!response.ok) {
+          throw new Error(
+            data?.error ??
+              (response.status === 500
+                ? "Could not load this studio. It may have been deleted."
+                : `Failed to load studio (HTTP ${response.status}).`),
+          );
+        }
+
+        if (!data) {
+          throw new Error(
+            "The API returned an unexpected response. Make sure the backend is running.",
+          );
+        }
+
+        setFormData({
+          title: asString(data.title),
+          category: asString(data.category),
+          hourlyRate: asString(data.hourlyRate),
+          securityDeposit: asString(data.securityDeposit),
+          maxCapacity: asString(data.maxCapacity),
+          location: asString(data.location),
+          imageUrl: asString(data.imageUrl),
+          amenities: Array.isArray(data.amenities)
+            ? data.amenities.filter(
+                (item): item is string => typeof item === "string",
+              )
+            : [],
+          overview: asString(data.overview),
+          hostName: asString(data.hostName) || "Unknown Host",
+          hostEmail:
+            asString(data.hostEmail) ||
+            asString(data.ownerEmail) ||
+            "unknown@example.com",
+        });
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Failed to load studio data.",
+        );
+        router.push("/my-listings");
+      } finally {
+        setIsFetching(false);
+      }
     };
 
     fetchStudio();
@@ -179,7 +225,8 @@ export default function EditStudioPage() {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formData) return;
 
@@ -203,12 +250,82 @@ export default function EditStudioPage() {
 
     setIsLoading(true);
 
-    // Simulate API PUT/PATCH request
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const payload = {
+        ...formData,
+        hourlyRate: Number(formData.hourlyRate),
+        securityDeposit: Number(formData.securityDeposit),
+        maxCapacity: Number(formData.maxCapacity),
+      };
+
+      const response = await fetch(`http://localhost:8000/studios/${studioId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await readJsonResponse(response);
+
+      if (!response.ok) {
+        throw new Error(
+          result?.error ??
+            `Failed to update studio (HTTP ${response.status}). Make sure the backend is running and the PATCH route is available.`,
+        );
+      }
+
+      if (!result) {
+        throw new Error(
+          "The API returned an unexpected response instead of JSON.",
+        );
+      }
+
       toast.success("Studio updated successfully!");
-      router.push("/my-listings");
-    }, 1000);
+      // The details page fetches with `cache: "no-store"`, so the push alone
+      // loads the updated data. Refreshing the edit route here would only
+      // delay the pending navigation.
+      router.push(`/studios/${studioId}`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch(`http://localhost:8000/studios/${studioId}`, {
+        method: "DELETE",
+      });
+
+      const result = await readJsonResponse(response);
+
+      if (!response.ok) {
+        throw new Error(
+          result?.error ??
+            `Failed to delete studio (HTTP ${response.status}). Make sure the backend is running and the DELETE route is available.`,
+        );
+      }
+
+      toast.success("Studio deleted successfully!");
+      setIsDeleteDialogOpen(false);
+      router.push("/studios");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (isFetching || !formData) {
@@ -266,14 +383,8 @@ export default function EditStudioPage() {
                   <Label htmlFor="category" className="text-slate-700">
                     Category <span className="text-red-500">*</span>
                   </Label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(val) => handleChange("category", val)}
-                  >
-                    <SelectTrigger
-                      id="category"
-                      className={errors.category ? "border-red-500 focus-visible:ring-red-500" : ""}
-                    >
+                  <Select value={formData.category} onValueChange={(val) => handleChange("category", val)}>
+                    <SelectTrigger id="category" className={errors.category ? "border-red-500 focus-visible:ring-red-500" : ""}>
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -450,9 +561,7 @@ export default function EditStudioPage() {
                   )}
                   <span
                     className={`text-xs font-mono ${
-                      formData.overview.trim().length < 50
-                        ? "text-slate-400"
-                        : "text-emerald-600 font-medium"
+                      formData.overview.trim().length < 50 ? "text-slate-400" : "text-emerald-600 font-medium"
                     }`}
                   >
                     {formData.overview.trim().length}/50 chars min
@@ -500,7 +609,7 @@ export default function EditStudioPage() {
             </CardContent>
           </Card>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col-reverse gap-4 sm:flex-row">
             <Button
               type="button"
               variant="outline"
@@ -510,6 +619,70 @@ export default function EditStudioPage() {
             >
               Cancel
             </Button>
+
+            <Dialog
+              open={isDeleteDialogOpen}
+              onOpenChange={setIsDeleteDialogOpen}
+            >
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  disabled={isDeleting}
+                  className="h-12 flex-1 border-red-200 font-heading text-base font-semibold text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  <Trash2 className="size-5" />
+                  Delete
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="font-heading text-xl">
+                    Delete this studio?
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-slate-500">
+                    This action cannot be undone. This will permanently delete{" "}
+                    <span className="font-medium text-slate-700">
+                      {formData.title}
+                    </span>{" "}
+                    and remove all of its data.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={isDeleting}
+                    >
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        Deleting...
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="size-4" />
+                        Delete Studio
+                      </>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <Button
               type="submit"
               size="lg"
