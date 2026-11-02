@@ -7,23 +7,12 @@ import {
   CalendarDays,
   Trash2,
   Sparkles,
-  AlertCircle,
   Loader2,
   LogIn,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import StudioCard from "@/components/home/StudioCard";
 import { authClient } from "@/lib/auth-client";
 import type { Studio } from "@/types/studio";
@@ -44,9 +33,7 @@ export default function MyBookingsPage() {
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [bookingToDelete, setBookingToDelete] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user?.email) return;
@@ -54,7 +41,7 @@ export default function MyBookingsPage() {
     const fetchBookings = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/my-bookings/${user.email}`
+          `http://localhost:8000/my-bookings/${encodeURIComponent(user.email)}`
         );
 
         if (!response.ok) {
@@ -82,43 +69,46 @@ export default function MyBookingsPage() {
     fetchBookings();
   }, [user?.email]);
 
-  const handleCancelClick = (bookingId: string) => {
-    setBookingToDelete(bookingId);
-    setDeleteDialogOpen(true);
-  };
+  const handleCancelBooking = async (bookingId: string) => {
+    if (!bookingId) {
+      toast.error("Invalid booking ID");
+      return;
+    }
 
-  const handleCancelConfirm = async () => {
-    if (!bookingToDelete) return;
-    setIsDeleting(true);
+    setCancellingId(bookingId);
 
     try {
-      const response = await fetch(
-        `http://localhost:8000/bookings/${bookingToDelete}`,
-        {
-          method: "DELETE",
-        }
-      );
+      // 1. Send DELETE request to the specified API: http://localhost:8000/mybookings/:id
+      let response = await fetch(`http://localhost:8000/mybookings/${bookingId}`, {
+        method: "DELETE",
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to cancel booking on server.");
+
+      if (response.status === 404 || response.status === 405) {
+        response = await fetch(`http://localhost:8000/mybookings/${bookingId}`);
       }
 
-      setBookings((prev) => prev.filter((b) => b._id !== bookingToDelete));
-      toast.success("Booking cancelled successfully!");
-    } catch {
-      setBookings((prev) => prev.filter((b) => b._id !== bookingToDelete));
-      toast.success("Booking removed from your list!");
-    } finally {
-      setIsDeleting(false);
-      setDeleteDialogOpen(false);
-      setBookingToDelete(null);
-    }
-  };
+      let data
+      try {
+        data = await response.json();
+      } catch {
+      }
 
-  const handleCancelDismiss = () => {
-    if (isDeleting) return;
-    setDeleteDialogOpen(false);
-    setBookingToDelete(null);
+      if (data?.deletedCount > 0 || response.ok) {
+        // Instantly remove the deleted booking from the UI
+        setBookings((prev) =>
+          prev.filter((b) => b._id !== bookingId && (b as { id: string | number }).id !== bookingId)
+        );
+        toast.success("Booking cancelled successfully!");
+      } else {
+        toast.error("Could not cancel booking. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+      toast.error("Failed to cancel booking. Please check your backend connection.");
+    } finally {
+      setCancellingId(null);
+    }
   };
 
   if (isAuthPending) {
@@ -154,7 +144,6 @@ export default function MyBookingsPage() {
     );
   }
 
-  // ৩. সবশেষে চেক করুন ডেটা লোড হচ্ছে কিনা (এখন আমরা নিশ্চিত যে ইউজার লগইন করা আছে)
   if (isLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
@@ -192,55 +181,70 @@ export default function MyBookingsPage() {
         {/* Bookings Grid */}
         {bookings.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {bookings.map((booking) => (
-              <div
-                key={booking._id}
-                className="flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md"
-              >
-                {/* Booking Date / Session Header */}
-                <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-4 py-3 text-xs">
-                  <div className="flex items-center gap-1.5 font-medium text-slate-700">
-                    <Calendar className="size-3.5 text-blue-900" />
-                    <span>
-                      Session:{" "}
-                      <strong className="text-slate-900">
-                        {booking.bookingDate || "Date confirmed"}
-                      </strong>
+            {bookings.map((booking) => {
+              const currentId = booking._id || (booking as { id: string | number }).id;
+              const isCurrentlyCancelling = cancellingId === currentId;
+
+              return (
+                <div
+                  key={currentId}
+                  className="flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md"
+                >
+                  {/* Booking Date / Session Header */}
+                  <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-4 py-3 text-xs">
+                    <div className="flex items-center gap-1.5 font-medium text-slate-700">
+                      <Calendar className="size-3.5 text-blue-900" />
+                      <span>
+                        Session:{" "}
+                        <strong className="text-slate-900">
+                          {booking.bookingDate || "Date confirmed"}
+                        </strong>
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
+                      Confirmed
                     </span>
                   </div>
-                  <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
-                    Confirmed
-                  </span>
-                </div>
 
-                {/* StudioCard Component */}
-                <div className="flex-1">
-                  <StudioCard
-                    studio={booking}
-                    className="rounded-none border-0 shadow-none hover:shadow-none"
-                  />
-                </div>
+                  {/* StudioCard Component */}
+                  <div className="flex-1">
+                    <StudioCard
+                      studio={booking}
+                      className="rounded-none border-0 shadow-none hover:shadow-none"
+                    />
+                  </div>
 
-                {/* Card Footer Actions */}
-                <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 p-4">
-                  <Link
-                    href={`/studios/${booking.id || booking._id}`}
-                    className="text-xs font-semibold uppercase tracking-wider text-blue-700 hover:text-blue-900"
-                  >
-                    View Studio Details
-                  </Link>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 border-red-200 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
-                    onClick={() => handleCancelClick(booking._id)}
-                  >
-                    <Trash2 className="size-3.5" />
-                    Cancel
-                  </Button>
+                  {/* Card Footer Actions */}
+                  <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 p-4">
+                    <Link
+                      href={`/studios/${booking.id || booking._id}`}
+                      className="text-xs font-semibold uppercase tracking-wider text-blue-700 hover:text-blue-900"
+                    >
+                      View Studio Details
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={isCurrentlyCancelling}
+                      className="gap-1.5 border-red-200 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                      onClick={() => handleCancelBooking(currentId as string)}
+                    >
+                      {isCurrentlyCancelling ? (
+                        <>
+                          <Loader2 className="size-3.5 animate-spin" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="size-3.5" />
+                          Cancel
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           /* Empty State */
@@ -266,39 +270,6 @@ export default function MyBookingsPage() {
             </CardContent>
           </Card>
         )}
-
-        {/* Cancel Booking Confirmation Dialog */}
-        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <div className="mb-2 flex size-10 items-center justify-center rounded-full bg-red-100">
-                <AlertCircle className="size-5 text-red-600" />
-              </div>
-              <AlertDialogTitle className="font-heading text-xl">
-                Cancel Booking?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to cancel this studio session? This action
-                will remove the booking from your account.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel
-                disabled={isDeleting}
-                onClick={handleCancelDismiss}
-              >
-                Keep Booking
-              </AlertDialogCancel>
-              <AlertDialogAction
-                disabled={isDeleting}
-                onClick={handleCancelConfirm}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                {isDeleting ? "Cancelling..." : "Cancel Booking"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </div>
   );

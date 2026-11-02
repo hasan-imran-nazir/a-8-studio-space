@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, Shield, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Calendar, Clock, Loader2, Shield, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -10,7 +12,9 @@ import { Studio } from "@/types/studio";
 import { authClient } from "@/lib/auth-client";
 
 const BookingCard = ({ studio }: { studio: Studio }) => {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -21,29 +25,57 @@ const BookingCard = ({ studio }: { studio: Studio }) => {
 
   const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("Please log in to request a booking.");
+      router.push("/login");
+      return;
+    }
+
     const form = e.currentTarget;
     const bookingDate =
       (form.elements.namedItem("bookingdate") as HTMLInputElement)?.value ||
       selectedDate;
 
-    const data = {
-      userId: user?.id,
-      userName: user?.name,
-      email: user?.email,
-      userImage: user?.image,
-      bookingDate,
-      ...studio,
-    };
+    if (!bookingDate) {
+      toast.error("Please select a date for your booking.");
+      return;
+    }
 
-    const res = await fetch("http://localhost:8000/add-booking", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const bookingData = await res.json();
-    console.log(bookingData);
+    setIsSubmitting(true);
+
+    try {
+      const { _id, ...studioDetails } = studio as any;
+      const data = {
+        userId: user?.id,
+        userName: user?.name,
+        email: user?.email,
+        userImage: user?.image,
+        bookingDate,
+        studioId: _id || studio.id,
+        ...studioDetails,
+      };
+
+      const res = await fetch("http://localhost:8000/add-booking", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to add booking");
+      }
+
+      toast.success("Studio booked successfully!");
+      router.push("/my-bookings");
+    } catch (error) {
+      console.error("Booking error:", error);
+      toast.error("Failed to submit booking. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -112,10 +144,20 @@ const BookingCard = ({ studio }: { studio: Studio }) => {
 
             <Button
               type="submit"
-              className="mt-4.5 h-12 w-full bg-amber-500 font-heading text-base font-bold text-white hover:bg-amber-600"
+              disabled={isSubmitting}
+              className="mt-4.5 h-12 w-full bg-amber-500 font-heading text-base font-bold text-white hover:bg-amber-600 disabled:opacity-70"
             >
-              <Sparkles className="mr-2 size-5" />
-              Request to Book
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 size-5 animate-spin" />
+                  Booking...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 size-5" />
+                  Request to Book
+                </>
+              )}
             </Button>
           </form>
 
