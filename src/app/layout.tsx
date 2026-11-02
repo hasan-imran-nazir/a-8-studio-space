@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import {
-  IBM_Plex_Sans,
-  JetBrains_Mono,
-  Space_Grotesk,
-} from "next/font/google";
+import { IBM_Plex_Sans, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Toaster } from "sonner";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
@@ -40,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <Toaster />
+        <Toaster position="top-right"/>
       </body>
     </html>
   );

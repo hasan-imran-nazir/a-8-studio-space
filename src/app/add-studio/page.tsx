@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, PlusCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { authClient } from "@/lib/auth-client";
 
 export interface StudioFormData {
   title: string;
@@ -62,6 +63,9 @@ const AMENITIES_OPTIONS = [
 type FormErrors = Partial<Record<keyof StudioFormData, string>>;
 
 export default function AddStudioPage() {
+  const { data } = authClient.useSession();
+  const user = data?.user;
+
   const router = useRouter();
   const [formData, setFormData] = useState<StudioFormData>({
     title: "",
@@ -73,9 +77,19 @@ export default function AddStudioPage() {
     imageUrl: "",
     amenities: [],
     overview: "",
-    hostName: "Imran Nazir",
-    hostEmail: "imran@example.com",
+    hostName: user?.name || "",
+    hostEmail: user?.email || "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        hostName: user.name || prev.hostName,
+        hostEmail: user.email || prev.hostEmail,
+      }));
+    }
+  }, [user]);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -201,9 +215,6 @@ export default function AddStudioPage() {
       }
 
       toast.success("Studio added successfully!");
-      // The studios page fetches fresh data on mount, so a plain push is enough.
-      // Calling router.refresh() here would re-render the current (add) route and
-      // can delay or cancel the pending navigation.
       router.push("/studios");
     } catch (error) {
       toast.error(
@@ -530,8 +541,8 @@ export default function AddStudioPage() {
                 </Label>
                 <Input
                   id="hostName"
-                  value={formData.hostName}
                   disabled
+                  value={user?.name}
                   className="bg-slate-100 text-slate-500"
                 />
               </div>
@@ -543,8 +554,8 @@ export default function AddStudioPage() {
                 <Input
                   id="hostEmail"
                   type="email"
-                  value={formData.hostEmail}
                   disabled
+                  value={user?.email}
                   className="bg-slate-100 text-slate-500"
                 />
               </div>
