@@ -1,4 +1,5 @@
 import StudioCard from "@/components/home/StudioCard";
+import { API_URL } from "@/lib/config";
 import { auth } from "@/lib/auth";
 import type { Studio } from "@/types/studio";
 import { ArrowRight } from "lucide-react";
@@ -17,7 +18,7 @@ async function getFeaturedStudios(): Promise<Studio[]> {
   }
 
   try {
-    const res = await fetch("http://localhost:8000/studios", {
+    const res = await fetch(`${API_URL}/studios`, {
       method: "GET",
       cache: "no-store",
       headers: token ? { authorization: `Bearer ${token}` } : undefined,

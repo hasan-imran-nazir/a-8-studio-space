@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import BookingCard from "@/components/layout/BookingCard";
+import { API_URL } from "@/lib/config";
 import type { Studio } from "@/types/studio";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -62,12 +63,11 @@ export default async function StudioDetailsPage({
     const result = await auth.api.getToken({ headers: reqHeaders });
     token = result?.token;
   } catch {
-    // Not signed in: public studio details can still be fetched below.
   }
 
   let studio: Studio | null = null;
   try {
-    const response = await fetch(`http://localhost:8000/studios/${id}`, {
+    const response = await fetch(`${API_URL}/studios/${id}`, {
       cache: "no-store",
       headers: token ? { authorization: `Bearer ${token}` } : undefined,
     });

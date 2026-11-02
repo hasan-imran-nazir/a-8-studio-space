@@ -196,7 +196,6 @@ export default function AddStudioPage() {
           const parsed = JSON.parse(text) as { error?: string };
           if (parsed?.error) message = parsed.error;
         } catch {
-          // Non-JSON error response (e.g. an HTML error page).
         }
 
         throw new Error(message);

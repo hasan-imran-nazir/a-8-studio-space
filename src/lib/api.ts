@@ -1,12 +1,8 @@
 import { authClient } from "@/lib/auth-client";
 
-export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+export { API_URL } from "@/lib/config";
+import { API_URL } from "@/lib/config";
 
-/**
- * Returns a short-lived JWT for the current session.
- * Throws when there is no signed-in user so callers can surface a clear error.
- */
 export async function getAuthToken() {
   const { data, error } = await authClient.token();
   const token = data?.token;
@@ -18,9 +14,6 @@ export async function getAuthToken() {
   return token;
 }
 
-/**
- * Fetch wrapper for protected backend routes. Attaches the JWT as a Bearer token.
- */
 export async function authFetch(path: string, init: RequestInit = {}) {
   const token = await getAuthToken();
   const headers = new Headers(init.headers);

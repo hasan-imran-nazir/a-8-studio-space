@@ -170,11 +170,11 @@ export default function HeroSlider() {
           <div className="relative lg:col-span-5">
             <div
               aria-hidden="true"
-              className="absolute -inset-2 rounded-[1.75rem] border border-white/10 bg-white/[0.03]"
+              className="absolute -inset-2 rounded-[1.75rem] border border-white/10 bg-white/3"
             />
 
             <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-slate-950 shadow-2xl shadow-blue-950/60">
-              <div className="relative aspect-[4/3]">
+              <div className="relative aspect-4/3">
                 {slides.map((slide, index) => {
                   const active = index === currentSlide;
 
@@ -191,12 +191,12 @@ export default function HeroSlider() {
                     >
                       <div
                         className={cn(
-                          "absolute inset-0 bg-cover bg-center transition-transform duration-[7000ms] ease-out",
+                          "absolute inset-0 bg-cover bg-center transition-transform duration-7000 ease-out",
                           active ? "scale-105" : "scale-100",
                         )}
                         style={{ backgroundImage: `url("${slide.image}")` }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/10" />
+                      <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/45 to-slate-950/10" />
 
                       <span className="absolute left-4 top-4 z-10 rounded-full border border-white/20 bg-slate-950/50 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-white backdrop-blur-md">
                         {slide.category}

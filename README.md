@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Studio Space
 
-## Getting Started
+**Live Website:** 
 
-First, run the development server:
+Studio Space is a creative studio booking platform that connects people looking for creative spaces with hosts who want to list their studios. Users can explore different studio spaces, view details, and make bookings.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Explore Studios:** Browse available creative spaces and search or filter studios by category.
+- **Studio Details:** View studio images, descriptions, hourly rates, security deposits, capacity, amenities, and location.
+- **User Authentication:** Register and log in using email or Google authentication.
+- **Studio Booking:** Book creative spaces for photography, film production, podcasts, music, and other creative projects.
+- **Host Dashboard:** View and manage your own studio listings.
+- **Studio Management:** Add new studios, update existing listings, and delete listings.
+- **Responsive Design:** Use the platform across desktop, tablet, and mobile devices.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technology Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js** – Frontend framework
+- **TypeScript** – Type-safe development
+- **Tailwind CSS** – Styling
+- **shadcn/ui** – User interface components
+- **Better Auth** – Authentication and session management
+- **Lucide React** – Icons
+- **Sonner** – Toast notifications
 
-## Learn More
+## Local Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the frontend repository.
+2. Navigate to the project directory.
+3. Install the project dependencies using npm.
+4. Create a `.env` file in the project root.
+5. Configure the backend API URL and required authentication environment variables.
+6. Make sure the backend server is running.
+7. Start the development server using the available npm development script.
+8. Open the local application at `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Backend Repository
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[\[Backend Repo\]](https://github.com/hasan-imran-nazir/a-8-studio-space-backend)
