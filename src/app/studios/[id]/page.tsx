@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import {
   MapPin,
   Pencil,
-  Shield,
   BadgeCheck,
   Wifi,
   Car,
@@ -14,13 +13,13 @@ import {
   VolumeX,
   Sparkles,
   Scissors,
-  Clock,
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import BookingCard from "@/components/layout/BookingCard";
+import type { Studio } from "@/types/studio";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Sparkles,
@@ -54,15 +53,27 @@ export default async function StudioDetailsPage({
 }) {
   const { id } = await params;
 
-  const response = await fetch(`http://localhost:8000/studios/${id}`, {
-    cache: "no-store",
-  });
+  let studio: Studio | null = null;
+  try {
+    const response = await fetch(`http://localhost:8000/studios/${id}`, {
+      cache: "no-store",
+    });
 
-  if (!response.ok) {
+    if (response.ok) {
+      studio = (await response.json()) as Studio;
+    }
+  } catch (error) {
+    console.error("Failed to fetch studio:", error);
+  }
+
+  if (!studio) {
     notFound();
   }
 
-  const studio = await response.json();
+  const studioImage =
+    studio.imageUrl ||
+    studio.image ||
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
@@ -113,7 +124,7 @@ export default async function StudioDetailsPage({
 
         <div className="relative aspect-21/9 w-full overflow-hidden rounded-xl shadow-sm mb-12 bg-slate-100">
           <Image
-            src={studio.imageUrl}
+            src={studioImage}
             alt={studio.title}
             fill
             priority
@@ -123,7 +134,7 @@ export default async function StudioDetailsPage({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-8 space-y-10">
-            {/* Host Info (Using real hostName/hostEmail from DB) */}
+            {/* Host Info */}
             <Card className="border-slate-200 shadow-sm">
               <CardContent className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
@@ -139,7 +150,7 @@ export default async function StudioDetailsPage({
                   </div>
                   <div>
                     <h2 className="font-heading text-lg font-semibold text-slate-900">
-                      Hosted by {studio.hostName}
+                      Hosted by {studio.hostName || "Host"}
                     </h2>
                     <p className="text-sm text-slate-500">
                       {studio.hostEmail || "Contact via platform"}
@@ -159,13 +170,13 @@ export default async function StudioDetailsPage({
               </p>
             </section>
 
-            {/* Amenities (Mapped directly from DB array) */}
+            {/* Amenities */}
             <section className="space-y-6">
               <h2 className="font-heading text-xl font-semibold text-slate-900">
                 Included Equipment & Amenities
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {studio.amenities &&
+                {Array.isArray(studio.amenities) &&
                   studio.amenities.map((amenity: string, index: number) => {
                     const iconName = getIconForAmenity(amenity);
                     const Icon = ICON_MAP[iconName] || Sparkles;

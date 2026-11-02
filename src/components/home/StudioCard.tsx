@@ -13,6 +13,10 @@ type StudioCardProps = {
 
 export default function StudioCard({ studio, className }: StudioCardProps) {
   const [isSaved, setIsSaved] = useState(false);
+  const studioImage = studio.image || studio.imageUrl || "";
+  const studioId = studio.id || studio._id || "";
+  const ratingValue = studio.rating != null ? studio.rating.toFixed(2) : "5.00";
+  const priceValue = studio.price ?? studio.hourlyRate ?? 0;
 
   return (
     <article
@@ -25,7 +29,7 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-105"
-          style={{ backgroundImage: `url("${studio.image}")` }}
+          style={{ backgroundImage: `url("${studioImage}")` }}
         />
         <div
           aria-hidden="true"
@@ -62,9 +66,11 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
           />
         </button>
 
-        <span className="absolute bottom-2.5 left-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-slate-900 shadow-sm backdrop-blur-md">
-          {studio.sqft.toLocaleString()} sqft
-        </span>
+        {studio.sqft != null && (
+          <span className="absolute bottom-2.5 left-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-slate-900 shadow-sm backdrop-blur-md">
+            {studio.sqft.toLocaleString()} sqft
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
@@ -75,13 +81,13 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
           </p>
           <p className="flex shrink-0 items-center gap-1 font-mono text-[11px] font-medium text-slate-700">
             <Star className="size-3 fill-amber-400 text-amber-400" />
-            {studio.rating.toFixed(2)}
+            {ratingValue}
           </p>
         </div>
 
         <h3 className="mt-2 line-clamp-2 min-h-11 font-heading text-base font-semibold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-blue-700">
           <Link
-            href={`/studios/${studio.id}`}
+            href={`/studios/${studioId}`}
             className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
           >
             {studio.title}
@@ -90,13 +96,13 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
 
         <div className="mt-auto flex items-end justify-between gap-2 pt-3">
           <p className="font-mono text-base font-bold text-blue-700">
-            ${studio.price}
+            ${priceValue}
             <span className="ml-0.5 text-[10px] font-medium text-slate-500">
               /hr
             </span>
           </p>
           <Link
-            href={`/studios/${studio.id}`}
+            href={`/studios/${studioId}`}
             className="group/link inline-flex items-center gap-1 font-heading text-[10px] font-semibold uppercase tracking-widest text-slate-900 transition-colors hover:text-blue-700"
           >
             View Details

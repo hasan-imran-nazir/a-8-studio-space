@@ -1,15 +1,22 @@
 export interface Studio {
-  id: string;
+  _id?: string;
+  id?: string;
   title: string;
-  location: string;
-  price: number;
   category: string;
-  sqft: number;
-  rating: number;
-  image: string;
+  location: string;
+  hourlyRate?: number | string;
+  price?: number;
+  securityDeposit?: number;
+  maxCapacity?: string | number;
+  imageUrl?: string;
+  image?: string;
+  amenities?: string[];
+  overview?: string;
+  hostName?: string;
+  hostEmail?: string;
   instantBook?: boolean;
   naturalLight?: boolean;
-  hourlyRate?: number
-  maxCapacity?: string | number;
-  securityDeposit?: number;
+  sqft?: number;
+  rating?: number;
+  reviews?: number;
 }

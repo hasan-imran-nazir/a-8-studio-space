@@ -59,32 +59,32 @@ const studios: Studio[] = [
   {
     id: "minimalist-editorial-concrete-studio",
     title: "Minimalist Editorial Concrete Studio",
-    location: "Chicago, IL",
+    location: "Greenpoint, Brooklyn",
     price: 85,
     category: "Photo Studio",
-    sqft: 1850,
-    rating: 4.97,
+    sqft: 1800,
+    rating: 4.88,
     instantBook: true,
     naturalLight: true,
     image:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    id: "multi-set-content-creator-lab",
-    title: "Multi-Set Content Creator & Streaming Lab",
-    location: "Atlanta, GA",
+    id: "industrial-high-ceiling-dance-movement-space",
+    title: "Industrial High-Ceiling Dance & Movement Space",
+    location: "Chicago, IL",
     price: 70,
-    category: "Content Lab",
-    sqft: 1400,
-    rating: 4.89,
-    instantBook: true,
+    category: "Dance Studio",
+    sqft: 3200,
+    rating: 4.97,
+    naturalLight: true,
     image:
-      "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
 const filters = [
-  { id: "all", label: "All Featured" },
+  { id: "all", label: "All Studios" },
   { id: "instant", label: "Instant Book" },
   { id: "under-100", label: "Under $100/hr" },
   { id: "natural-light", label: "Natural Light" },
@@ -100,7 +100,7 @@ export default function FeaturedStudios() {
       case "instant":
         return studio.instantBook;
       case "under-100":
-        return studio.price < 100;
+        return Number(studio.price ?? studio.hourlyRate ?? 0) < 100;
       case "natural-light":
         return studio.naturalLight;
       default:
@@ -114,38 +114,39 @@ export default function FeaturedStudios() {
       className="border-y border-slate-200/70 bg-slate-50 py-16 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm sm:text-[11px]">
-              <span className="size-1.5 rounded-full bg-blue-600" />
-              Curated Portfolios
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="font-heading text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+              Curated Spaces
             </span>
-
-            <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            <h2 className="mt-2 font-heading text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
               Featured Studios
             </h2>
-
-            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
-              Hand-picked production spaces with verified amenities,
-              transparent pricing, and instant booking options.
+            <p className="mt-2 max-w-xl text-sm text-slate-600 sm:text-base">
+              Hand-picked, high-demand spaces vetted for sound, lighting, and
+              creative flow.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 lg:justify-end">
+          <div
+            role="tablist"
+            aria-label="Filter studios"
+            className="inline-flex flex-wrap gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-xs"
+          >
             {filters.map((filter) => {
-              const active = activeFilter === filter.id;
-
+              const isActive = activeFilter === filter.id;
               return (
                 <button
                   key={filter.id}
                   type="button"
-                  aria-pressed={active}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveFilter(filter.id)}
                   className={cn(
-                    "rounded-full border px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors",
-                    active
-                      ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900",
+                    "rounded-md px-3 py-1.5 font-heading text-xs font-medium uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    isActive
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "text-slate-600 hover:text-slate-900",
                   )}
                 >
                   {filter.label}
@@ -155,37 +156,19 @@ export default function FeaturedStudios() {
           </div>
         </div>
 
-        {filteredStudios.length > 0 ? (
-          <div className="mt-8 grid auto-rows-fr grid-cols-1 items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {filteredStudios.map((studio) => (
-              <StudioCard key={studio.id} studio={studio} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-10 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-            <p className="font-heading text-lg font-semibold text-slate-900">
-              No studios match this filter
-            </p>
-            <p className="mt-2 text-sm text-slate-500">
-              Try another filter or browse the full collection.
-            </p>
-            <button
-              type="button"
-              onClick={() => setActiveFilter("all")}
-              className="mt-4 font-heading text-xs font-semibold uppercase tracking-[0.12em] text-blue-700 transition-colors hover:text-blue-800"
-            >
-              Show all studios
-            </button>
-          </div>
-        )}
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredStudios.map((studio) => (
+            <StudioCard key={studio.id} studio={studio} />
+          ))}
+        </div>
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <Link
             href="/studios"
-            className="group inline-flex h-12 items-center justify-center gap-2 rounded-md bg-slate-900 px-6 font-heading text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+            className="group inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 font-heading text-xs font-semibold uppercase tracking-[0.14em] text-slate-800 shadow-xs transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Explore All Studios
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            Explore all 1,200+ studios
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
       </div>
