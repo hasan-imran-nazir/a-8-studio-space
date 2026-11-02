@@ -10,6 +10,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Studio } from "@/types/studio";
 import { authClient } from "@/lib/auth-client";
+import { authFetch } from "@/lib/api";
 
 const BookingCard = ({ studio }: { studio: Studio }) => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const BookingCard = ({ studio }: { studio: Studio }) => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  const hourlyRate = Number(studio.hourlyRate ?? studio.price ?? 0);
+  const hourlyRate = Number(studio.hourlyRate ?? studio.price);
   const securityDeposit = Number(studio.securityDeposit ?? 0);
   const minHours = 4;
   const estimatedTotal = hourlyRate * minHours + securityDeposit;
@@ -45,7 +46,7 @@ const BookingCard = ({ studio }: { studio: Studio }) => {
     setIsSubmitting(true);
 
     try {
-      const { _id, ...studioDetails } = studio as any;
+      const { _id, ...studioDetails } = studio;
       const data = {
         userId: user?.id,
         userName: user?.name,
@@ -56,23 +57,20 @@ const BookingCard = ({ studio }: { studio: Studio }) => {
         ...studioDetails,
       };
 
-      const res = await fetch("http://localhost:8000/add-booking", {
+      const res = await authFetch("/add-booking", {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
         body: JSON.stringify(data),
       });
-
+      const result = await res.json();
       if (!res.ok) {
-        throw new Error("Failed to add booking");
+        throw new Error(result.error || "Failed to add booking");
       }
 
       toast.success("Studio booked successfully!");
       router.push("/my-bookings");
     } catch (error) {
       console.error("Booking error:", error);
-      toast.error("Failed to submit booking. Please try again.");
+      toast.error((error as { message: string }).message || "Failed to submit booking. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

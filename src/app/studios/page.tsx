@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { API_URL } from "@/lib/api";
 
 interface Studio {
   _id: string;
@@ -35,12 +36,15 @@ export default function ExploreStudiosPage() {
   useEffect(() => {
     const fetchStudios = async () => {
       try {
-        const response = await fetch("http://localhost:8000/studios");
+        const response = await fetch(`${API_URL}/studios`, {
+          method: "GET",
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch studios");
         }
         const data = await response.json();
-        setStudios(data);
+        setStudios(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching studios:", error);
       } finally {

@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { authFetch } from "@/lib/api";
 
 export interface StudioFormData {
   title: string;
@@ -70,18 +71,25 @@ const AMENITIES_OPTIONS = [
 
 type FormErrors = Partial<Record<keyof StudioFormData, string>>;
 
-type ApiResponse = { error?: string; message?: string } & Record<string, unknown>;
+type ApiResponse = { error?: string; message?: string } & Record<
+  string,
+  unknown
+>;
 
 const OBJECT_ID_PATTERN = /^[a-f\d]{24}$/i;
 
-async function readJsonResponse(response: Response): Promise<ApiResponse | null> {
+async function readJsonResponse(
+  response: Response,
+): Promise<ApiResponse | null> {
   const text = await response.text();
 
   if (!text) return null;
 
   try {
     const parsed: unknown = JSON.parse(text);
-    return parsed && typeof parsed === "object" ? (parsed as ApiResponse) : null;
+    return parsed && typeof parsed === "object"
+      ? (parsed as ApiResponse)
+      : null;
   } catch {
     return null;
   }
@@ -114,7 +122,9 @@ export default function EditStudioPage() {
       }
 
       try {
-        const response = await fetch(`http://localhost:8000/studios/${studioId}`);
+        const response = await authFetch(`/studios/${studioId}`, {
+          cache: "no-store",
+        });
         const data = await readJsonResponse(response);
 
         if (!response.ok) {
@@ -154,7 +164,9 @@ export default function EditStudioPage() {
         });
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to load studio data.",
+          error instanceof Error
+            ? error.message
+            : "Failed to load studio data.",
         );
         router.push("/my-listings");
       } finally {
@@ -190,7 +202,9 @@ export default function EditStudioPage() {
         return undefined;
       }
       case "location":
-        return !String(value).trim() ? "Location/Address is required." : undefined;
+        return !String(value).trim()
+          ? "Location/Address is required."
+          : undefined;
       case "imageUrl":
         return !String(value).trim() ? "Image URL is required." : undefined;
       case "overview": {
@@ -206,7 +220,10 @@ export default function EditStudioPage() {
     }
   };
 
-  const handleChange = (field: keyof StudioFormData, value: string | string[]) => {
+  const handleChange = (
+    field: keyof StudioFormData,
+    value: string | string[],
+  ) => {
     if (!formData) return;
     setFormData((prev) => ({ ...prev!, [field]: value }));
     const error = validateField(field, value);
@@ -225,14 +242,17 @@ export default function EditStudioPage() {
     });
   };
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formData) return;
 
     const newErrors: FormErrors = {};
     (Object.keys(formData) as Array<keyof StudioFormData>).forEach((field) => {
-      if (field === "hostName" || field === "hostEmail" || field === "amenities") {
+      if (
+        field === "hostName" ||
+        field === "hostEmail" ||
+        field === "amenities"
+      ) {
         return;
       }
       const error = validateField(field, formData[field]);
@@ -257,12 +277,8 @@ export default function EditStudioPage() {
         securityDeposit: Number(formData.securityDeposit),
         maxCapacity: Number(formData.maxCapacity),
       };
-
-      const response = await fetch(`http://localhost:8000/studios/${studioId}`, {
+      const response = await authFetch(`/studios/${studioId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(payload),
       });
 
@@ -282,9 +298,6 @@ export default function EditStudioPage() {
       }
 
       toast.success("Studio updated successfully!");
-      // The details page fetches with `cache: "no-store"`, so the push alone
-      // loads the updated data. Refreshing the edit route here would only
-      // delay the pending navigation.
       router.push(`/studios/${studioId}`);
     } catch (error) {
       toast.error(
@@ -299,9 +312,8 @@ export default function EditStudioPage() {
 
   const handleDelete = async () => {
     setIsDeleting(true);
-
     try {
-      const response = await fetch(`http://localhost:8000/studios/${studioId}`, {
+      const response = await authFetch(`/studios/${studioId}`, {
         method: "DELETE",
       });
 
@@ -373,9 +385,15 @@ export default function EditStudioPage() {
                   placeholder="e.g. Industrial Daylight Loft & Cyc"
                   value={formData.title}
                   onChange={(e) => handleChange("title", e.target.value)}
-                  className={errors.title ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.title
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
-                {errors.title && <p className="text-xs text-red-600">{errors.title}</p>}
+                {errors.title && (
+                  <p className="text-xs text-red-600">{errors.title}</p>
+                )}
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -383,8 +401,18 @@ export default function EditStudioPage() {
                   <Label htmlFor="category" className="text-slate-700">
                     Category <span className="text-red-500">*</span>
                   </Label>
-                  <Select value={formData.category} onValueChange={(val) => handleChange("category", val)}>
-                    <SelectTrigger id="category" className={errors.category ? "border-red-500 focus-visible:ring-red-500" : ""}>
+                  <Select
+                    value={formData.category}
+                    onValueChange={(val) => handleChange("category", val)}
+                  >
+                    <SelectTrigger
+                      id="category"
+                      className={
+                        errors.category
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : ""
+                      }
+                    >
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -395,12 +423,15 @@ export default function EditStudioPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.category && <p className="text-xs text-red-600">{errors.category}</p>}
+                  {errors.category && (
+                    <p className="text-xs text-red-600">{errors.category}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="maxCapacity" className="text-slate-700">
-                    Max Capacity (Persons) <span className="text-red-500">*</span>
+                    Max Capacity (Persons){" "}
+                    <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="maxCapacity"
@@ -408,10 +439,18 @@ export default function EditStudioPage() {
                     min="1"
                     placeholder="e.g. 25"
                     value={formData.maxCapacity}
-                    onChange={(e) => handleChange("maxCapacity", e.target.value)}
-                    className={errors.maxCapacity ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    onChange={(e) =>
+                      handleChange("maxCapacity", e.target.value)
+                    }
+                    className={
+                      errors.maxCapacity
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
-                  {errors.maxCapacity && <p className="text-xs text-red-600">{errors.maxCapacity}</p>}
+                  {errors.maxCapacity && (
+                    <p className="text-xs text-red-600">{errors.maxCapacity}</p>
+                  )}
                 </div>
               </div>
 
@@ -428,14 +467,21 @@ export default function EditStudioPage() {
                     placeholder="e.g. 95"
                     value={formData.hourlyRate}
                     onChange={(e) => handleChange("hourlyRate", e.target.value)}
-                    className={errors.hourlyRate ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    className={
+                      errors.hourlyRate
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
-                  {errors.hourlyRate && <p className="text-xs text-red-600">{errors.hourlyRate}</p>}
+                  {errors.hourlyRate && (
+                    <p className="text-xs text-red-600">{errors.hourlyRate}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="securityDeposit" className="text-slate-700">
-                    Security Deposit ($ USD) <span className="text-red-500">*</span>
+                    Security Deposit ($ USD){" "}
+                    <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="securityDeposit"
@@ -444,10 +490,20 @@ export default function EditStudioPage() {
                     step="1"
                     placeholder="e.g. 250"
                     value={formData.securityDeposit}
-                    onChange={(e) => handleChange("securityDeposit", e.target.value)}
-                    className={errors.securityDeposit ? "border-red-500 focus-visible:ring-red-500" : ""}
+                    onChange={(e) =>
+                      handleChange("securityDeposit", e.target.value)
+                    }
+                    className={
+                      errors.securityDeposit
+                        ? "border-red-500 focus-visible:ring-red-500"
+                        : ""
+                    }
                   />
-                  {errors.securityDeposit && <p className="text-xs text-red-600">{errors.securityDeposit}</p>}
+                  {errors.securityDeposit && (
+                    <p className="text-xs text-red-600">
+                      {errors.securityDeposit}
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -473,9 +529,15 @@ export default function EditStudioPage() {
                   placeholder="e.g. SoHo, Manhattan, NY"
                   value={formData.location}
                   onChange={(e) => handleChange("location", e.target.value)}
-                  className={errors.location ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.location
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
-                {errors.location && <p className="text-xs text-red-600">{errors.location}</p>}
+                {errors.location && (
+                  <p className="text-xs text-red-600">{errors.location}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -488,9 +550,15 @@ export default function EditStudioPage() {
                   placeholder="Upload image to imgbb/postimage and paste URL here"
                   value={formData.imageUrl}
                   onChange={(e) => handleChange("imageUrl", e.target.value)}
-                  className={errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.imageUrl
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
-                {errors.imageUrl && <p className="text-xs text-red-600">{errors.imageUrl}</p>}
+                {errors.imageUrl && (
+                  <p className="text-xs text-red-600">{errors.imageUrl}</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -537,7 +605,8 @@ export default function EditStudioPage() {
                 4. Description
               </CardTitle>
               <CardDescription className="text-sm text-slate-500">
-                Tell creators what makes your studio unique (minimum 50 characters).
+                Tell creators what makes your studio unique (minimum 50
+                characters).
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -551,7 +620,11 @@ export default function EditStudioPage() {
                   placeholder="Describe your studio space, equipment, lighting conditions, and unique features..."
                   value={formData.overview}
                   onChange={(e) => handleChange("overview", e.target.value)}
-                  className={errors.overview ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  className={
+                    errors.overview
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }
                 />
                 <div className="flex items-center justify-between">
                   {errors.overview ? (
@@ -561,7 +634,9 @@ export default function EditStudioPage() {
                   )}
                   <span
                     className={`text-xs font-mono ${
-                      formData.overview.trim().length < 50 ? "text-slate-400" : "text-emerald-600 font-medium"
+                      formData.overview.trim().length < 50
+                        ? "text-slate-400"
+                        : "text-emerald-600 font-medium"
                     }`}
                   >
                     {formData.overview.trim().length}/50 chars min
@@ -578,7 +653,8 @@ export default function EditStudioPage() {
                 5. Host Information
               </CardTitle>
               <CardDescription className="text-sm text-slate-500">
-                Associated host credentials for this listing (cannot be changed).
+                Associated host credentials for this listing (cannot be
+                changed).
               </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-6 sm:grid-cols-2">

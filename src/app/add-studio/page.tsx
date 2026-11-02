@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, PlusCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { authClient } from "@/lib/auth-client";
+import { authFetch } from "@/lib/api";
 
 export interface StudioFormData {
   title: string;
@@ -77,19 +78,9 @@ export default function AddStudioPage() {
     imageUrl: "",
     amenities: [],
     overview: "",
-    hostName: user?.name as string,
-    hostEmail: user?.email as string,
+    hostName: user?.name ?? "",
+    hostEmail: user?.email ?? "",
   });
-
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        hostName: user.name || prev.hostName,
-        hostEmail: user.email || prev.hostEmail,
-      }));
-    }
-  }, [user]);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -184,19 +175,16 @@ export default function AddStudioPage() {
     setIsLoading(true);
 
     try {
-      // Convert the numeric inputs from strings before sending them to the API.
       const payload = {
         ...formData,
+        hostName: user?.name ?? formData.hostName,
+        hostEmail: user?.email ?? formData.hostEmail,
         hourlyRate: Number(formData.hourlyRate),
         securityDeposit: Number(formData.securityDeposit),
         maxCapacity: Number(formData.maxCapacity),
       };
-
-      const res = await fetch("http://localhost:8000/add-studio", {
+      const res = await authFetch("/add-studio", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(payload),
       });
 

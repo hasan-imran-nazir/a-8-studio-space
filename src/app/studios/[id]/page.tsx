@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import BookingCard from "@/components/layout/BookingCard";
 import type { Studio } from "@/types/studio";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Sparkles,
@@ -53,10 +55,21 @@ export default async function StudioDetailsPage({
 }) {
   const { id } = await params;
 
+  let token: string | undefined;
+
+  try {
+    const reqHeaders = await headers();
+    const result = await auth.api.getToken({ headers: reqHeaders });
+    token = result?.token;
+  } catch {
+    // Not signed in: public studio details can still be fetched below.
+  }
+
   let studio: Studio | null = null;
   try {
     const response = await fetch(`http://localhost:8000/studios/${id}`, {
       cache: "no-store",
+      headers: token ? { authorization: `Bearer ${token}` } : undefined,
     });
 
     if (response.ok) {
@@ -72,8 +85,7 @@ export default async function StudioDetailsPage({
 
   const studioImage =
     studio.imageUrl ||
-    studio.image ||
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80";
+    studio.image ;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-16">
@@ -124,7 +136,7 @@ export default async function StudioDetailsPage({
 
         <div className="relative aspect-21/9 w-full overflow-hidden rounded-xl shadow-sm mb-12 bg-slate-100">
           <Image
-            src={studioImage}
+            src={studioImage as string}
             alt={studio.title}
             fill
             priority

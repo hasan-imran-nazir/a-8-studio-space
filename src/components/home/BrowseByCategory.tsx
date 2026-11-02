@@ -92,7 +92,7 @@ export default function BrowseByCategory() {
               </p>
 
               <div className="mt-auto flex items-center justify-between gap-2 border-t border-slate-100 pt-4">
-                <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500">
+                <span className="font-mono text-[11px] uppercase tracking-widest text-slate-500">
                   {count}
                 </span>
                 <ArrowRight className="size-4 text-slate-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-blue-600" />

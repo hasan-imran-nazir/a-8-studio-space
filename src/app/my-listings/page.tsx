@@ -2,23 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Sparkles, Loader2, LogIn, Pencil, Trash2, AlertCircle } from "lucide-react";
+import { Sparkles, Loader2, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import StudioCard from "@/components/home/StudioCard";
 import { authClient } from "@/lib/auth-client";
+import { authFetch } from "@/lib/api";
 import type { Studio } from "@/types/studio";
 
 export default function MyListingsPage() {
@@ -33,9 +23,8 @@ export default function MyListingsPage() {
 
     const fetchMyStudios = async () => {
       try {
-        // Fetch ONLY the studios where hostEmail matches the logged-in user
-        const response = await fetch(
-          `http://localhost:8000/my-listings/${user.email}`
+        const response = await authFetch(
+          `/my-listings/${encodeURIComponent(user.email)}`,
         );
 
         if (!response.ok) {
@@ -110,7 +99,8 @@ export default function MyListingsPage() {
               My Studio Listings
             </h1>
             <p className="mt-2 text-slate-500">
-              Manage your listed creative spaces, update details, or remove them.
+              Manage your listed creative spaces, update details, or remove
+              them.
             </p>
           </div>
 
@@ -125,11 +115,9 @@ export default function MyListingsPage() {
         {/* Studios Grid */}
         {studios.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {studios.map((studio) =>{
+            {studios.map((studio) => {
               const studioId = studio._id;
-              return (
-                <StudioCard key={studioId} studio={studio} />
-              );
+              return <StudioCard key={studioId} studio={studio} />;
             })}
           </div>
         ) : (
@@ -143,7 +131,8 @@ export default function MyListingsPage() {
                 No studios listed yet
               </h3>
               <p className="mt-2 max-w-md text-slate-500">
-                You haven&apos;t added any studio spaces yet. Start hosting by listing your first creative space.
+                You haven&apos;t added any studio spaces yet. Start hosting by
+                listing your first creative space.
               </p>
               <Link href="/add-studio" className="mt-6">
                 <Button className="gap-2 bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">

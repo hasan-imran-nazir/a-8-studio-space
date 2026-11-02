@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import StudioCard from "@/components/home/StudioCard";
 import { authClient } from "@/lib/auth-client";
+import { authFetch } from "@/lib/api";
 import type { Studio } from "@/types/studio";
 
 interface Booking extends Studio {
@@ -40,8 +41,8 @@ export default function MyBookingsPage() {
 
     const fetchBookings = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/my-bookings/${encodeURIComponent(user.email)}`
+        const response = await authFetch(
+          `/my-bookings/${encodeURIComponent(user.email)}`,
         );
 
         if (!response.ok) {
@@ -78,20 +79,15 @@ export default function MyBookingsPage() {
     setCancellingId(bookingId);
 
     try {
-      // 1. Send DELETE request to the specified API: http://localhost:8000/mybookings/:id
-      let response = await fetch(`http://localhost:8000/mybookings/${bookingId}`, {
+      const response = await authFetch(`/mybookings/${bookingId}`, {
         method: "DELETE",
       });
 
-
-      if (response.status === 404 || response.status === 405) {
-        response = await fetch(`http://localhost:8000/mybookings/${bookingId}`);
-      }
-
-      let data
+      let data;
       try {
         data = await response.json();
       } catch {
+        // The API may return an empty body on success.
       }
 
       if (data?.deletedCount > 0 || response.ok) {
