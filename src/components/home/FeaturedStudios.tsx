@@ -39,20 +39,20 @@ export default async function FeaturedStudios() {
   return (
     <section
       id="featured-studios"
-      className="border-y border-slate-200/70 bg-slate-50 py-16 sm:py-20 lg:py-24"
+      className="border-y border-border/70 bg-muted/40 py-16 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm sm:text-[11px]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm sm:text-[11px]">
             <span className="size-1.5 rounded-full bg-blue-600" />
             Curated Portfolios
           </span>
 
-          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Featured Studios
           </h2>
 
-          <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
+          <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
             Hand-picked production spaces with verified amenities, transparent
             pricing, and instant booking options.
           </p>
@@ -64,7 +64,7 @@ export default async function FeaturedStudios() {
             ))}
           </div>
         ) : (
-          <p className="mt-10 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center text-sm text-slate-500">
+          <p className="mt-10 rounded-xl border border-dashed border-border bg-card px-6 py-10 text-center text-sm text-muted-foreground">
             No studios are available right now. Please check back soon.
           </p>
         )}
@@ -72,7 +72,7 @@ export default async function FeaturedStudios() {
         <div className="mt-12 flex justify-center">
           <Link
             href="/studios"
-            className="group inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 font-heading text-xs font-semibold uppercase tracking-[0.14em] text-slate-800 shadow-xs transition-colors hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 font-heading text-xs font-semibold uppercase tracking-[0.14em] text-foreground shadow-xs transition-colors hover:border-ring hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             Explore all 1,200+ studios
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />

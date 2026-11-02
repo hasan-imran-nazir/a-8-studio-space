@@ -88,21 +88,21 @@ export default async function StudioDetailsPage({
     studio.image ;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16">
+    <div className="min-h-screen bg-background pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
-        <nav className="mb-6 flex items-center gap-2 text-sm text-slate-500">
-          <Link href="/" className="hover:text-blue-700 transition-colors">
+        <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
+          <Link href="/" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
             Home
           </Link>
           <ChevronRight className="size-3.5" />
           <Link
             href="/studios"
-            className="hover:text-blue-700 transition-colors"
+            className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
           >
             Studios
           </Link>
           <ChevronRight className="size-3.5" />
-          <span className="text-slate-900 font-medium truncate max-w-50">
+          <span className="text-foreground font-medium truncate max-w-50">
             {studio.title}
           </span>
         </nav>
@@ -110,14 +110,14 @@ export default async function StudioDetailsPage({
         <div className="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-blue-900 uppercase tracking-wider">
+              <span className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider">
                 {studio.category}
               </span>
             </div>
-            <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+            <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
               {studio.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <MapPin className="size-4" />
                 <span>{studio.location}</span>
@@ -134,7 +134,7 @@ export default async function StudioDetailsPage({
           </div>
         </div>
 
-        <div className="relative aspect-21/9 w-full overflow-hidden rounded-xl shadow-sm mb-12 bg-slate-100">
+        <div className="relative aspect-21/9 w-full overflow-hidden rounded-xl shadow-sm mb-12 bg-muted">
           <Image
             src={studioImage as string}
             alt={studio.title}
@@ -147,11 +147,11 @@ export default async function StudioDetailsPage({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-8 space-y-10">
             {/* Host Info */}
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="border-border shadow-sm">
               <CardContent className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                   <div className="relative shrink-0">
-                    <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xl">
+                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-bold text-xl">
                       {studio.hostName
                         ? studio.hostName.charAt(0).toUpperCase()
                         : "H"}
@@ -161,10 +161,10 @@ export default async function StudioDetailsPage({
                     </div>
                   </div>
                   <div>
-                    <h2 className="font-heading text-lg font-semibold text-slate-900">
+                    <h2 className="font-heading text-lg font-semibold text-foreground">
                       Hosted by {studio.hostName || "Host"}
                     </h2>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-muted-foreground">
                       {studio.hostEmail || "Contact via platform"}
                     </p>
                   </div>
@@ -174,17 +174,17 @@ export default async function StudioDetailsPage({
 
             {/* Overview */}
             <section className="space-y-4">
-              <h2 className="font-heading text-xl font-semibold text-slate-900">
+              <h2 className="font-heading text-xl font-semibold text-foreground">
                 About the Space
               </h2>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed">
                 {studio.overview}
               </p>
             </section>
 
             {/* Amenities */}
             <section className="space-y-6">
-              <h2 className="font-heading text-xl font-semibold text-slate-900">
+              <h2 className="font-heading text-xl font-semibold text-foreground">
                 Included Equipment & Amenities
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -195,13 +195,13 @@ export default async function StudioDetailsPage({
                     return (
                       <div
                         key={index}
-                        className="p-4 rounded-xl bg-white shadow-sm flex items-start gap-3 border border-slate-100"
+                        className="p-4 rounded-xl bg-card shadow-sm flex items-start gap-3 border border-border"
                       >
-                        <div className="p-2.5 rounded-lg bg-blue-50 text-blue-900 shrink-0">
+                        <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-700 dark:text-blue-300 shrink-0">
                           <Icon className="size-5" />
                         </div>
                         <div>
-                          <h3 className="font-heading text-sm font-semibold text-slate-900">
+                          <h3 className="font-heading text-sm font-semibold text-foreground">
                             {amenity}
                           </h3>
                         </div>
@@ -213,15 +213,15 @@ export default async function StudioDetailsPage({
 
             {/* Location */}
             <section className="space-y-4">
-              <h2 className="font-heading text-xl font-semibold text-slate-900">
+              <h2 className="font-heading text-xl font-semibold text-foreground">
                 Location
               </h2>
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-white shadow-sm border border-slate-100">
-                <div className="p-2.5 rounded-lg bg-blue-50 text-blue-900">
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-card shadow-sm border border-border">
+                <div className="p-2.5 rounded-lg bg-blue-500/10 text-blue-700 dark:text-blue-300">
                   <MapPin className="size-5" />
                 </div>
                 <div>
-                  <p className="font-heading text-sm font-semibold text-slate-900">
+                  <p className="font-heading text-sm font-semibold text-foreground">
                     {studio.location}
                   </p>
                 </div>

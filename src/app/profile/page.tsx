@@ -58,28 +58,28 @@ export default function ProfilePage() {
 
   if (isPending) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-muted">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-4 py-16">
-        <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm">
+      <div className="flex min-h-[70vh] items-center justify-center bg-muted px-4 py-16">
+        <Card className="w-full max-w-md border-border bg-card shadow-sm">
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="mb-4 rounded-full bg-blue-50 p-4 text-blue-900">
+            <div className="mb-4 rounded-full bg-blue-500/10 p-4 text-blue-700 dark:text-blue-300">
               <LogIn className="size-8" />
             </div>
-            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
               Sign In to View Your Profile
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               You must be logged in to manage your profile and account details.
             </p>
             <Link href="/login" className="mt-6 w-full">
-              <Button className="w-full bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+              <Button className="w-full bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
                 Log In
               </Button>
             </Link>
@@ -131,41 +131,41 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm">
+        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm">
           <span className="size-1.5 rounded-full bg-blue-600" />
           Account
         </span>
 
-        <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           My Profile
         </h1>
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-muted-foreground">
           Your account details and quick links to your studio activity.
         </p>
 
-        <Card className="mt-8 border-slate-200 bg-white shadow-sm">
+        <Card className="mt-8 border-border bg-card shadow-sm">
           <CardContent className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center">
             <Avatar size="lg">
               <AvatarImage src={user.image || ""} alt={user.name || "User"} />
-              <AvatarFallback className="bg-slate-900 text-sm font-semibold text-white">
+              <AvatarFallback className="bg-primary text-sm font-semibold text-primary-foreground">
                 {getInitials(user.name || "User")}
               </AvatarFallback>
             </Avatar>
 
             <div className="min-w-0 flex-1 space-y-1">
-              <p className="flex items-center gap-2 font-heading text-lg font-semibold text-slate-900">
-                <UserRound className="size-4 text-slate-400" />
+              <p className="flex items-center gap-2 font-heading text-lg font-semibold text-foreground">
+                <UserRound className="size-4 text-muted-foreground" />
                 {user.name}
               </p>
-              <p className="truncate text-sm text-slate-500">{user.email}</p>
+              <p className="truncate text-sm text-muted-foreground">{user.email}</p>
             </div>
 
             <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
               <Button
                 variant="outline"
-                className="border-slate-300 text-slate-700 hover:bg-slate-100"
+                className="border-border text-foreground hover:bg-muted"
                 onClick={openNameDialog}
               >
                 <Pencil className="size-4" />
@@ -173,7 +173,7 @@ export default function ProfilePage() {
               </Button>
               <Button
                 variant="outline"
-                className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                className="border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300"
                 onClick={handleSignOut}
               >
                 Sign Out
@@ -185,23 +185,23 @@ export default function ProfilePage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           <Link
             href="/add-studio"
-            className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100"
+            className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
           >
-            <PlusCircle className="size-4 text-blue-600" />
+            <PlusCircle className="size-4 text-blue-600 dark:text-blue-400" />
             Add Studio
           </Link>
           <Link
             href="/my-listings"
-            className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100"
+            className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
           >
-            <LayoutDashboard className="size-4 text-slate-500" />
+            <LayoutDashboard className="size-4 text-muted-foreground" />
             My Listings
           </Link>
           <Link
             href="/my-bookings"
-            className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100"
+            className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
           >
-            <CalendarDays className="size-4 text-slate-500" />
+            <CalendarDays className="size-4 text-muted-foreground" />
             My Bookings
           </Link>
         </div>

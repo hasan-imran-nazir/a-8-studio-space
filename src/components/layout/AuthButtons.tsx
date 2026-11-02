@@ -48,7 +48,7 @@ export default function AuthButtons({ className }: { className?: string }) {
         className={cn("flex h-9 items-center justify-center", className)}
         aria-label="Loading account"
       >
-        <Loader2 className="size-4 animate-spin text-slate-400" />
+        <Loader2 className="size-4 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -81,11 +81,11 @@ export default function AuthButtons({ className }: { className?: string }) {
         >
           <Avatar size="default">
             <AvatarImage src={user.image || ""} alt={user.name || "User"} />
-            <AvatarFallback className="bg-slate-900 text-white text-xs font-semibold">
+            <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
               {getInitials(user.name || "User")}
             </AvatarFallback>
           </Avatar>
-          <span className="max-w-24 truncate font-heading text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 sm:max-w-32">
+          <span className="max-w-24 truncate font-heading text-xs font-semibold uppercase tracking-[0.12em] text-foreground sm:max-w-32">
             {user.name}
           </span>
         </button>
@@ -94,10 +94,10 @@ export default function AuthButtons({ className }: { className?: string }) {
       <PopoverContent className="w-64 p-0" align="end">
 
         <div className="flex flex-col gap-1 border-b border-border p-4">
-          <p className="font-heading text-sm font-semibold text-slate-900">
+          <p className="font-heading text-sm font-semibold text-foreground">
             {user.name}
           </p>
-          <p className="text-xs text-slate-500 truncate">
+          <p className="text-xs text-muted-foreground truncate">
             {user.email}
           </p>
         </div>
@@ -106,30 +106,30 @@ export default function AuthButtons({ className }: { className?: string }) {
         <div className="py-2">
           <Link
             href="/profile"
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors"
           >
-            <User className="size-4 text-slate-500" />
+            <User className="size-4 text-muted-foreground" />
             Profile
           </Link>
           <Link
             href="/add-studio"
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors"
           >
-            <PlusCircle className="size-4 text-blue-600" />
+            <PlusCircle className="size-4 text-blue-600 dark:text-blue-400" />
             Add New Studio
           </Link>
           <Link
             href="/my-listings"
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors"
           >
-            <LayoutDashboard className="size-4 text-slate-500" />
+            <LayoutDashboard className="size-4 text-muted-foreground" />
             My Studio Listings
           </Link>
           <Link
             href="/my-bookings"
-            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-3 px-4 py-2.5 text-sm text-foreground hover:bg-muted transition-colors"
           >
-            <CalendarDays className="size-4 text-slate-500" />
+            <CalendarDays className="size-4 text-muted-foreground" />
             My Bookings
           </Link>
         </div>
@@ -138,7 +138,7 @@ export default function AuthButtons({ className }: { className?: string }) {
         <div className="border-t border-border py-2">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors"
           >
             <LogOut className="size-4" />
             Logout

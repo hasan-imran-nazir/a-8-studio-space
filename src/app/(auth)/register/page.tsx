@@ -171,7 +171,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-slate-50 px-4 py-16 sm:px-6">
+    <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-muted/40 px-4 py-16 sm:px-6">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-60"
@@ -186,16 +186,16 @@ export default function RegisterPage() {
         className="pointer-events-none absolute -top-32 left-1/2 size-96 -translate-x-1/2 rounded-full bg-blue-600/10 blur-3xl"
       />
 
-      <Card className="relative w-full max-w-md gap-0 border-slate-200 py-0 shadow-xl shadow-slate-900/5">
+      <Card className="relative w-full max-w-md gap-0 border-border py-0 shadow-xl shadow-slate-900/5">
         <CardHeader className="gap-3 px-6 pb-6 pt-8 sm:px-8">
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             <span className="size-1.5 rounded-full bg-blue-600" />
             Join the Network
           </span>
-          <CardTitle className="font-heading text-3xl font-bold tracking-tight text-slate-900">
+          <CardTitle className="font-heading text-3xl font-bold tracking-tight text-foreground">
             Create Account
           </CardTitle>
-          <CardDescription className="text-sm leading-6 text-slate-500">
+          <CardDescription className="text-sm leading-6 text-muted-foreground">
             Set up your profile to book studios or start listing your own
             production space.
           </CardDescription>
@@ -204,13 +204,13 @@ export default function RegisterPage() {
         <CardContent className="px-6 pb-8 sm:px-8">
           <form onSubmit={handleEmailSubmit} noValidate className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-slate-700">
+              <Label htmlFor="name" className="text-foreground">
                 Name
               </Label>
               <div className="relative">
                 <User
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
                   id="name"
@@ -228,13 +228,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-700">
+              <Label htmlFor="email" className="text-foreground">
                 Email
               </Label>
               <div className="relative">
                 <Mail
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
                   id="email"
@@ -252,13 +252,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="photoUrl" className="text-slate-700">
+              <Label htmlFor="photoUrl" className="text-foreground">
                 Photo URL
               </Label>
               <div className="relative">
                 <ImageIcon
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
                   id="photoUrl"
@@ -276,13 +276,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-700">
+              <Label htmlFor="password" className="text-foreground">
                 Password
               </Label>
               <div className="relative">
                 <LockKeyhole
                   aria-hidden="true"
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
                   id="password"
@@ -307,7 +307,7 @@ export default function RegisterPage() {
                     {passwordErrors.map((error) => (
                       <li
                         key={error}
-                        className="flex items-center gap-1.5 text-xs text-red-600"
+                        className="flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400"
                       >
                         <span className="size-1 shrink-0 rounded-full bg-red-500" />
                         {error}
@@ -315,7 +315,7 @@ export default function RegisterPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     6+ characters with at least one uppercase and one lowercase
                     letter.
                   </p>
@@ -341,11 +341,11 @@ export default function RegisterPage() {
           </form>
 
           <div className="my-6 flex items-center gap-3">
-            <span className="h-px flex-1 bg-slate-200" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">
+            <span className="h-px flex-1 bg-muted" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               OR
             </span>
-            <span className="h-px flex-1 bg-slate-200" />
+            <span className="h-px flex-1 bg-muted" />
           </div>
 
           <Button
@@ -364,11 +364,11 @@ export default function RegisterPage() {
             Continue with Google
           </Button>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-heading font-semibold text-blue-700 transition-colors hover:text-blue-800"
+              className="font-heading font-semibold text-blue-700 dark:text-blue-400 transition-colors hover:text-blue-800 dark:hover:text-blue-300"
             >
               Login
             </Link>

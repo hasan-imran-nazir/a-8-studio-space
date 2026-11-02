@@ -343,41 +343,41 @@ export default function EditStudioPage() {
   if (isFetching || !formData) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-50 py-12 sm:py-16">
+    <div className="bg-background py-12 sm:py-16">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm sm:text-[11px]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm sm:text-[11px]">
             <span className="size-1.5 rounded-full bg-amber-500" />
             Edit Listing
           </span>
-          <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Update Studio
           </h1>
-          <p className="mt-2 text-sm text-slate-500 sm:text-base">
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
             Modify the details of your creative space.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-8">
           {/* 1. STUDIO INFORMATION */}
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader className="space-y-1.5 pb-6">
-              <CardTitle className="font-heading text-xl font-semibold text-slate-900">
+              <CardTitle className="font-heading text-xl font-semibold text-foreground">
                 1. Studio Information
               </CardTitle>
-              <CardDescription className="text-sm text-slate-500">
+              <CardDescription className="text-sm text-muted-foreground">
                 Provide core details about your venue pricing and capacity.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-700">
+                <Label htmlFor="title" className="text-foreground">
                   Studio Title <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -392,13 +392,13 @@ export default function EditStudioPage() {
                   }
                 />
                 {errors.title && (
-                  <p className="text-xs text-red-600">{errors.title}</p>
+                  <p className="text-xs text-red-600 dark:text-red-400">{errors.title}</p>
                 )}
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="category" className="text-slate-700">
+                  <Label htmlFor="category" className="text-foreground">
                     Category <span className="text-red-500">*</span>
                   </Label>
                   <Select
@@ -424,12 +424,12 @@ export default function EditStudioPage() {
                     </SelectContent>
                   </Select>
                   {errors.category && (
-                    <p className="text-xs text-red-600">{errors.category}</p>
+                    <p className="text-xs text-red-600 dark:text-red-400">{errors.category}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="maxCapacity" className="text-slate-700">
+                  <Label htmlFor="maxCapacity" className="text-foreground">
                     Max Capacity (Persons){" "}
                     <span className="text-red-500">*</span>
                   </Label>
@@ -449,14 +449,14 @@ export default function EditStudioPage() {
                     }
                   />
                   {errors.maxCapacity && (
-                    <p className="text-xs text-red-600">{errors.maxCapacity}</p>
+                    <p className="text-xs text-red-600 dark:text-red-400">{errors.maxCapacity}</p>
                   )}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="hourlyRate" className="text-slate-700">
+                  <Label htmlFor="hourlyRate" className="text-foreground">
                     Hourly Rate ($ USD) <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -474,12 +474,12 @@ export default function EditStudioPage() {
                     }
                   />
                   {errors.hourlyRate && (
-                    <p className="text-xs text-red-600">{errors.hourlyRate}</p>
+                    <p className="text-xs text-red-600 dark:text-red-400">{errors.hourlyRate}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="securityDeposit" className="text-slate-700">
+                  <Label htmlFor="securityDeposit" className="text-foreground">
                     Security Deposit ($ USD){" "}
                     <span className="text-red-500">*</span>
                   </Label>
@@ -500,7 +500,7 @@ export default function EditStudioPage() {
                     }
                   />
                   {errors.securityDeposit && (
-                    <p className="text-xs text-red-600">
+                    <p className="text-xs text-red-600 dark:text-red-400">
                       {errors.securityDeposit}
                     </p>
                   )}
@@ -510,18 +510,18 @@ export default function EditStudioPage() {
           </Card>
 
           {/* 2. LOCATION & MEDIA */}
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader className="space-y-1.5 pb-6">
-              <CardTitle className="font-heading text-xl font-semibold text-slate-900">
+              <CardTitle className="font-heading text-xl font-semibold text-foreground">
                 2. Location & Media
               </CardTitle>
-              <CardDescription className="text-sm text-slate-500">
+              <CardDescription className="text-sm text-muted-foreground">
                 Where is your studio located and what does it look like?
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="location" className="text-slate-700">
+                <Label htmlFor="location" className="text-foreground">
                   Location / Address <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -536,12 +536,12 @@ export default function EditStudioPage() {
                   }
                 />
                 {errors.location && (
-                  <p className="text-xs text-red-600">{errors.location}</p>
+                  <p className="text-xs text-red-600 dark:text-red-400">{errors.location}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="imageUrl" className="text-slate-700">
+                <Label htmlFor="imageUrl" className="text-foreground">
                   Image URL <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -557,19 +557,19 @@ export default function EditStudioPage() {
                   }
                 />
                 {errors.imageUrl && (
-                  <p className="text-xs text-red-600">{errors.imageUrl}</p>
+                  <p className="text-xs text-red-600 dark:text-red-400">{errors.imageUrl}</p>
                 )}
               </div>
             </CardContent>
           </Card>
 
           {/* 3. AMENITIES */}
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader className="space-y-1.5 pb-6">
-              <CardTitle className="font-heading text-xl font-semibold text-slate-900">
+              <CardTitle className="font-heading text-xl font-semibold text-foreground">
                 3. Amenities
               </CardTitle>
-              <CardDescription className="text-sm text-slate-500">
+              <CardDescription className="text-sm text-muted-foreground">
                 Select all features and equipment available on site.
               </CardDescription>
             </CardHeader>
@@ -580,15 +580,15 @@ export default function EditStudioPage() {
                   return (
                     <label
                       key={amenity}
-                      className="flex items-center space-x-3 rounded-lg border border-slate-200 p-3 transition-colors hover:bg-slate-50 cursor-pointer"
+                      className="flex items-center space-x-3 rounded-lg border border-border p-3 transition-colors hover:bg-muted cursor-pointer"
                     >
                       <input
                         type="checkbox"
                         checked={checked}
                         onChange={() => handleAmenityToggle(amenity)}
-                        className="size-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                        className="size-4 rounded border-border text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="font-sans text-sm font-medium text-slate-700">
+                      <span className="font-sans text-sm font-medium text-foreground">
                         {amenity}
                       </span>
                     </label>
@@ -599,19 +599,19 @@ export default function EditStudioPage() {
           </Card>
 
           {/* 4. DESCRIPTION */}
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader className="space-y-1.5 pb-6">
-              <CardTitle className="font-heading text-xl font-semibold text-slate-900">
+              <CardTitle className="font-heading text-xl font-semibold text-foreground">
                 4. Description
               </CardTitle>
-              <CardDescription className="text-sm text-slate-500">
+              <CardDescription className="text-sm text-muted-foreground">
                 Tell creators what makes your studio unique (minimum 50
                 characters).
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Label htmlFor="overview" className="text-slate-700">
+                <Label htmlFor="overview" className="text-foreground">
                   Detailed Overview <span className="text-red-500">*</span>
                 </Label>
                 <Textarea
@@ -628,15 +628,15 @@ export default function EditStudioPage() {
                 />
                 <div className="flex items-center justify-between">
                   {errors.overview ? (
-                    <p className="text-xs text-red-600">{errors.overview}</p>
+                    <p className="text-xs text-red-600 dark:text-red-400">{errors.overview}</p>
                   ) : (
                     <span />
                   )}
                   <span
                     className={`text-xs font-mono ${
                       formData.overview.trim().length < 50
-                        ? "text-slate-400"
-                        : "text-emerald-600 font-medium"
+                        ? "text-muted-foreground"
+                        : "text-emerald-600 dark:text-emerald-400 font-medium"
                     }`}
                   >
                     {formData.overview.trim().length}/50 chars min
@@ -647,31 +647,31 @@ export default function EditStudioPage() {
           </Card>
 
           {/* 5. HOST INFORMATION (Read-only) */}
-          <Card className="border-slate-200 shadow-sm bg-slate-50/50">
+          <Card className="border-border shadow-sm bg-muted/50">
             <CardHeader className="space-y-1.5 pb-6">
-              <CardTitle className="font-heading text-xl font-semibold text-slate-900">
+              <CardTitle className="font-heading text-xl font-semibold text-foreground">
                 5. Host Information
               </CardTitle>
-              <CardDescription className="text-sm text-slate-500">
+              <CardDescription className="text-sm text-muted-foreground">
                 Associated host credentials for this listing (cannot be
                 changed).
               </CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="hostName" className="text-slate-700">
+                <Label htmlFor="hostName" className="text-foreground">
                   Host Name
                 </Label>
                 <Input
                   id="hostName"
                   value={formData.hostName}
                   disabled
-                  className="bg-slate-100 text-slate-500 cursor-not-allowed"
+                  className="bg-muted text-muted-foreground cursor-not-allowed"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="hostEmail" className="text-slate-700">
+                <Label htmlFor="hostEmail" className="text-foreground">
                   Host Email
                 </Label>
                 <Input
@@ -679,7 +679,7 @@ export default function EditStudioPage() {
                   type="email"
                   value={formData.hostEmail}
                   disabled
-                  className="bg-slate-100 text-slate-500 cursor-not-allowed"
+                  className="bg-muted text-muted-foreground cursor-not-allowed"
                 />
               </div>
             </CardContent>
@@ -706,7 +706,7 @@ export default function EditStudioPage() {
                   variant="outline"
                   size="lg"
                   disabled={isDeleting}
-                  className="h-12 flex-1 border-red-200 font-heading text-base font-semibold text-red-600 hover:bg-red-50 hover:text-red-700"
+                  className="h-12 flex-1 border-red-500/30 font-heading text-base font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300"
                 >
                   <Trash2 className="size-5" />
                   Delete
@@ -718,9 +718,9 @@ export default function EditStudioPage() {
                   <DialogTitle className="font-heading text-xl">
                     Delete this studio?
                   </DialogTitle>
-                  <DialogDescription className="text-sm text-slate-500">
+                  <DialogDescription className="text-sm text-muted-foreground">
                     This action cannot be undone. This will permanently delete{" "}
-                    <span className="font-medium text-slate-700">
+                    <span className="font-medium text-foreground">
                       {formData.title}
                     </span>{" "}
                     and remove all of its data.
@@ -763,7 +763,7 @@ export default function EditStudioPage() {
               type="submit"
               size="lg"
               disabled={isLoading}
-              className="h-12 flex-2 bg-slate-900 font-heading text-base font-semibold text-white hover:bg-slate-800"
+              className="h-12 flex-2 bg-primary font-heading text-base font-semibold text-primary-foreground hover:bg-primary/90"
             >
               {isLoading ? (
                 <>

@@ -21,11 +21,11 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
   return (
     <article
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg",
+        "group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow duration-300 hover:shadow-lg",
         className,
       )}
     >
-      <div className="relative aspect-16/10 overflow-hidden bg-slate-200">
+      <div className="relative aspect-16/10 overflow-hidden bg-muted">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-105"
@@ -56,17 +56,17 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center justify-between gap-2">
-          <p className="flex min-w-0 items-center gap-1 text-[11px] text-slate-500">
+          <p className="flex min-w-0 items-center gap-1 text-[11px] text-muted-foreground">
             <MapPin className="size-3 shrink-0" />
             <span className="truncate">{studio.location}</span>
           </p>
-          <p className="flex shrink-0 items-center gap-1 font-mono text-[11px] font-medium text-slate-700">
+          <p className="flex shrink-0 items-center gap-1 font-mono text-[11px] font-medium text-foreground">
             <Star className="size-3 fill-amber-400 text-amber-400" />
             {ratingValue}
           </p>
         </div>
 
-        <h3 className="mt-2 line-clamp-2 min-h-11 font-heading text-base font-semibold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-blue-700">
+        <h3 className="mt-2 line-clamp-2 min-h-11 font-heading text-base font-semibold leading-snug tracking-tight text-foreground transition-colors group-hover:text-blue-700 dark:hover:text-blue-400">
           <Link
             href={`/studios/${studioId}`}
             className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
@@ -76,15 +76,15 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
         </h3>
 
         <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-          <p className="font-mono text-base font-bold text-blue-700">
+          <p className="font-mono text-base font-bold text-blue-700 dark:text-blue-400">
             ${priceValue}
-            <span className="ml-0.5 text-[10px] font-medium text-slate-500">
+            <span className="ml-0.5 text-[10px] font-medium text-muted-foreground">
               /hr
             </span>
           </p>
           <Link
             href={`/studios/${studioId}`}
-            className="group/link inline-flex items-center gap-1 font-heading text-[10px] font-semibold uppercase tracking-widest text-slate-900 transition-colors hover:text-blue-700"
+            className="group/link inline-flex items-center gap-1 font-heading text-[10px] font-semibold uppercase tracking-widest text-foreground transition-colors hover:text-blue-700 dark:hover:text-blue-400"
           >
             View Details
             <ArrowRight className="size-3 transition-transform group-hover/link:translate-x-0.5" />

@@ -46,28 +46,28 @@ export default function MyListingsPage() {
 
   if (isAuthPending) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-muted/40">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-4 py-16">
-        <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm">
+      <div className="flex min-h-[70vh] items-center justify-center bg-muted/40 px-4 py-16">
+        <Card className="w-full max-w-md border-border bg-card shadow-sm">
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="mb-4 rounded-full bg-blue-50 p-4 text-blue-900">
+            <div className="mb-4 rounded-full bg-blue-500/10 p-4 text-blue-700 dark:text-blue-300">
               <LogIn className="size-8" />
             </div>
-            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
               Sign In to View Listings
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               You must be logged in to view and manage your studio listings.
             </p>
             <Link href="/login" className="mt-6 w-full">
-              <Button className="w-full bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+              <Button className="w-full bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
                 Log In
               </Button>
             </Link>
@@ -80,32 +80,32 @@ export default function MyListingsPage() {
   // 3. Data Loading State
   if (isLoading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-muted/40">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm">
               <span className="size-1.5 rounded-full bg-blue-600" />
               Host Dashboard
             </span>
-            <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               My Studio Listings
             </h1>
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-muted-foreground">
               Manage your listed creative spaces, update details, or remove
               them.
             </p>
           </div>
 
           <Link href="/add-studio">
-            <Button className="h-11 gap-2 bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+            <Button className="h-11 gap-2 bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
               <Sparkles className="size-4" />
               Add New Studio
             </Button>
@@ -122,20 +122,20 @@ export default function MyListingsPage() {
           </div>
         ) : (
           /* Empty State */
-          <Card className="border-dashed border-slate-300 bg-white">
+          <Card className="border-dashed border-border bg-card">
             <CardContent className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="mb-4 rounded-full bg-slate-100 p-4">
-                <Sparkles className="size-12 text-slate-400" />
+              <div className="mb-4 rounded-full bg-muted p-4">
+                <Sparkles className="size-12 text-muted-foreground" />
               </div>
-              <h3 className="font-heading text-xl font-semibold text-slate-900">
+              <h3 className="font-heading text-xl font-semibold text-foreground">
                 No studios listed yet
               </h3>
-              <p className="mt-2 max-w-md text-slate-500">
+              <p className="mt-2 max-w-md text-muted-foreground">
                 You haven&apos;t added any studio spaces yet. Start hosting by
                 listing your first creative space.
               </p>
               <Link href="/add-studio" className="mt-6">
-                <Button className="gap-2 bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+                <Button className="gap-2 bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
                   <Sparkles className="size-4" />
                   Add Your First Studio
                 </Button>

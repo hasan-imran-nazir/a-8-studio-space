@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Aperture, Menu, X } from "lucide-react";
 import AuthButtons from "@/components/layout/AuthButtons";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -10,17 +11,17 @@ const navigation = [
 ];
 
 const navLink =
-  "border-b-2 border-transparent px-3 py-2 font-heading text-xs font-medium uppercase tracking-[0.12em] text-slate-600 transition-colors hover:text-slate-900";
+  "border-b-2 border-transparent px-3 py-2 font-heading text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground";
 
 const mobileNavLink =
-  "rounded-md border-l-2 border-transparent px-3 py-2.5 font-heading text-sm font-medium uppercase tracking-[0.12em] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900";
+  "rounded-md border-l-2 border-transparent px-3 py-2.5 font-heading text-sm font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground";
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-lg supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-md bg-slate-900 text-white transition-colors group-hover:bg-slate-700">
+          <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors group-hover:bg-primary/80">
             <Aperture className="size-5" strokeWidth={2} />
           </span>
           <span className="font-heading text-lg font-bold tracking-tight">
@@ -40,6 +41,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <AuthButtons />
         </div>
 
@@ -66,6 +68,13 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+
+              <div className="mt-3 flex items-center justify-between border-t border-border pt-4">
+                <span className="font-heading text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                  Theme
+                </span>
+                <ThemeToggle />
+              </div>
 
               <div className="mt-3 border-t border-border pt-4">
                 <AuthButtons className="w-full" />

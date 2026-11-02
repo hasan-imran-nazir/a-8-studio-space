@@ -108,28 +108,28 @@ export default function MyBookingsPage() {
 
   if (isAuthPending) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-muted/40">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center bg-slate-50 px-4 py-16">
-        <Card className="w-full max-w-md border-slate-200 bg-white shadow-sm">
+      <div className="flex min-h-[70vh] items-center justify-center bg-muted/40 px-4 py-16">
+        <Card className="w-full max-w-md border-border bg-card shadow-sm">
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="mb-4 rounded-full bg-blue-50 p-4 text-blue-900">
+            <div className="mb-4 rounded-full bg-blue-500/10 p-4 text-blue-700 dark:text-blue-300">
               <LogIn className="size-8" />
             </div>
-            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
               Sign In to View Bookings
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               You must be logged in to view and manage your studio bookings.
             </p>
             <Link href="/login" className="mt-6 w-full">
-              <Button className="w-full bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+              <Button className="w-full bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
                 Log In
               </Button>
             </Link>
@@ -141,32 +141,32 @@ export default function MyBookingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center bg-slate-50">
-        <Loader2 className="size-8 animate-spin text-slate-400" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-muted/40">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm">
               <span className="size-1.5 rounded-full bg-emerald-600" />
               Client Dashboard
             </span>
-            <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h1 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               My Bookings
             </h1>
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-muted-foreground">
               Manage your reserved creative studio spaces and upcoming sessions.
             </p>
           </div>
 
           <Link href="/studios">
-            <Button className="h-11 gap-2 bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+            <Button className="h-11 gap-2 bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
               <Sparkles className="size-4" />
               Explore More Studios
             </Button>
@@ -183,20 +183,20 @@ export default function MyBookingsPage() {
               return (
                 <div
                   key={currentId}
-                  className="flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md"
+                  className="flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md"
                 >
                   {/* Booking Date / Session Header */}
-                  <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-4 py-3 text-xs">
-                    <div className="flex items-center gap-1.5 font-medium text-slate-700">
-                      <Calendar className="size-3.5 text-blue-900" />
+                  <div className="flex items-center justify-between border-b border-border bg-muted/80 px-4 py-3 text-xs">
+                    <div className="flex items-center gap-1.5 font-medium text-foreground">
+                      <Calendar className="size-3.5 text-blue-700 dark:text-blue-300" />
                       <span>
                         Session:{" "}
-                        <strong className="text-slate-900">
+                        <strong className="text-foreground">
                           {booking.bookingDate || "Date confirmed"}
                         </strong>
                       </span>
                     </div>
-                    <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
+                    <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
                       Confirmed
                     </span>
                   </div>
@@ -210,10 +210,10 @@ export default function MyBookingsPage() {
                   </div>
 
                   {/* Card Footer Actions */}
-                  <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 p-4">
+                  <div className="flex items-center justify-between border-t border-border bg-muted/50 p-4">
                     <Link
                       href={`/studios/${booking.id || booking._id}`}
-                      className="text-xs font-semibold uppercase tracking-wider text-blue-700 hover:text-blue-900"
+                      className="text-xs font-semibold uppercase tracking-wider text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
                     >
                       View Studio Details
                     </Link>
@@ -221,7 +221,7 @@ export default function MyBookingsPage() {
                       variant="outline"
                       size="sm"
                       disabled={isCurrentlyCancelling}
-                      className="gap-1.5 border-red-200 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="gap-1.5 border-red-500/30 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300"
                       onClick={() => handleCancelBooking(currentId as string)}
                     >
                       {isCurrentlyCancelling ? (
@@ -243,21 +243,21 @@ export default function MyBookingsPage() {
           </div>
         ) : (
           /* Empty State */
-          <Card className="border-dashed border-slate-300 bg-white">
+          <Card className="border-dashed border-border bg-card">
             <CardContent className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="mb-4 rounded-full bg-slate-100 p-4">
-                <CalendarDays className="size-12 text-slate-400" />
+              <div className="mb-4 rounded-full bg-muted p-4">
+                <CalendarDays className="size-12 text-muted-foreground" />
               </div>
-              <h3 className="font-heading text-xl font-semibold text-slate-900">
+              <h3 className="font-heading text-xl font-semibold text-foreground">
                 No bookings found
               </h3>
-              <p className="mt-2 max-w-md text-slate-500">
+              <p className="mt-2 max-w-md text-muted-foreground">
                 You haven&apos;t booked any studio sessions yet. Browse our
                 handpicked spaces and reserve the right environment for your
                 project.
               </p>
               <Link href="/studios" className="mt-6">
-                <Button className="gap-2 bg-slate-900 font-heading font-semibold text-white hover:bg-slate-800">
+                <Button className="gap-2 bg-primary font-heading font-semibold text-primary-foreground hover:bg-primary/90">
                   <Sparkles className="size-4" />
                   Explore Studios
                 </Button>

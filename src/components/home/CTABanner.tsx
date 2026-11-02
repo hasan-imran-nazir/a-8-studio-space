@@ -3,7 +3,7 @@ import { ArrowRight, Plus } from "lucide-react";
 
 export default function CTABanner() {
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24">
+    <section className="bg-background py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-blue-800 to-slate-900 px-6 py-12 shadow-2xl shadow-slate-900/20 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
           <div

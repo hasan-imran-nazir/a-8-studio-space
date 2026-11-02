@@ -20,7 +20,7 @@ const steps = [
       "Choose calendar hours and easily configure optional equipment rentals, lighting kits, or certified sound engineers.",
     feature: "Add lighting & gear",
     icon: PlusCircle,
-    badgeClassName: "bg-blue-600/10 text-blue-700",
+    badgeClassName: "bg-blue-600/10 text-blue-700 dark:text-blue-400",
   },
   {
     step: "03",
@@ -30,7 +30,7 @@ const steps = [
       "Guaranteed slot reservations with zero hidden surcharge policies and direct messaging with verified studio hosts.",
     feature: "Escrow protection",
     icon: Lock,
-    badgeClassName: "bg-blue-600/10 text-blue-700",
+    badgeClassName: "bg-blue-600/10 text-blue-700 dark:text-blue-400",
   },
   {
     step: "04",
@@ -46,19 +46,19 @@ const steps = [
 
 export default function HowBookingWorks() {
   return (
-    <section id="how-it-works" className="bg-white py-16 sm:py-20 lg:py-24">
+    <section id="how-it-works" className="bg-background py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500 shadow-sm sm:text-[11px]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground shadow-sm sm:text-[11px]">
             <span className="size-1.5 rounded-full bg-blue-600" />
             Seamless Production Flow
           </span>
 
-          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             How Booking Works
           </h2>
 
-          <p className="mt-3 text-sm leading-7 text-slate-500 sm:text-base">
+          <p className="mt-3 text-sm leading-7 text-muted-foreground sm:text-base">
             A transparent four-step workflow built to move from first search to
             final wrap without friction.
           </p>
@@ -67,7 +67,7 @@ export default function HowBookingWorks() {
         <div className="relative mt-12">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-12 hidden h-0.5 bg-slate-200 lg:block"
+            className="pointer-events-none absolute left-0 right-0 top-12 hidden h-0.5 bg-muted lg:block"
           />
 
           <div className="relative z-10 grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -83,7 +83,7 @@ export default function HowBookingWorks() {
               }) => (
                 <article
                   key={step}
-                  className="flex h-full flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                  className="flex h-full flex-col rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
                 >
                   <div className="flex justify-center">
                     <span
@@ -96,21 +96,21 @@ export default function HowBookingWorks() {
                     </span>
                   </div>
 
-                  <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">
+                  <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                     {subtitle}
                   </p>
 
-                  <h3 className="mt-2 text-center font-heading text-lg font-semibold leading-snug tracking-tight text-slate-900">
+                  <h3 className="mt-2 text-center font-heading text-lg font-semibold leading-snug tracking-tight text-foreground">
                     {title}
                   </h3>
 
-                  <p className="mt-3 text-center text-sm leading-6 text-slate-500">
+                  <p className="mt-3 text-center text-sm leading-6 text-muted-foreground">
                     {description}
                   </p>
 
                   <div className="mt-auto pt-5 text-center">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-slate-600">
-                      <Icon className="size-3.5 text-slate-500" />
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      <Icon className="size-3.5 text-muted-foreground" />
                       {feature}
                     </span>
                   </div>
