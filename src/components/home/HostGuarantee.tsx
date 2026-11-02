@@ -90,7 +90,7 @@ export default function HostGuarantee() {
           <div className="hidden lg:col-span-5 lg:block">
             <div
               aria-hidden="true"
-              className="relative flex h-full min-h-80 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 shadow-sm"
+              className="relative flex h-full min-h-80 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-linear-to-br from-slate-900 via-slate-800 to-blue-900 shadow-sm"
             >
               <div
                 className="pointer-events-none absolute inset-0 opacity-25"

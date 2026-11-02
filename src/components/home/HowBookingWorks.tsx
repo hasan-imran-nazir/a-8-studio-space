@@ -109,7 +109,7 @@ export default function HowBookingWorks() {
                   </p>
 
                   <div className="mt-auto pt-5 text-center">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-slate-600">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-slate-600">
                       <Icon className="size-3.5 text-slate-500" />
                       {feature}
                     </span>
