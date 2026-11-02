@@ -77,8 +77,8 @@ export default function AddStudioPage() {
     imageUrl: "",
     amenities: [],
     overview: "",
-    hostName: user?.name || "",
-    hostEmail: user?.email || "",
+    hostName: user?.name as string,
+    hostEmail: user?.email as string,
   });
 
   useEffect(() => {

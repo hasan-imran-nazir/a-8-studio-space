@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Heart, MapPin, Star } from "lucide-react";
+import { ArrowRight, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Studio } from "@/types/studio";
 
@@ -46,25 +46,6 @@ export default function StudioCard({ studio, className }: StudioCardProps) {
             </span>
           )}
         </div>
-
-        <button
-          type="button"
-          aria-label={
-            isSaved
-              ? `Remove ${studio.title} from wishlist`
-              : `Save ${studio.title} to wishlist`
-          }
-          aria-pressed={isSaved}
-          onClick={() => setIsSaved((saved) => !saved)}
-          className="absolute right-2.5 top-2.5 z-10 flex size-8 items-center justify-center rounded-full border border-white/20 bg-slate-950/35 text-white backdrop-blur-md transition-colors hover:bg-slate-950/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-        >
-          <Heart
-            className={cn(
-              "size-3.5 transition-colors",
-              isSaved ? "fill-rose-500 text-rose-500" : "text-white",
-            )}
-          />
-        </button>
 
         {studio.sqft != null && (
           <span className="absolute bottom-2.5 left-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-widest text-slate-900 shadow-sm backdrop-blur-md">

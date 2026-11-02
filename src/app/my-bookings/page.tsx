@@ -95,7 +95,6 @@ export default function MyBookingsPage() {
       }
 
       if (data?.deletedCount > 0 || response.ok) {
-        // Instantly remove the deleted booking from the UI
         setBookings((prev) =>
           prev.filter((b) => b._id !== bookingId && (b as { id: string | number }).id !== bookingId)
         );
